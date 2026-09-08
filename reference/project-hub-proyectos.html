@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Hub — Proyectos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-brand-cyan: #00BCFF;
+    --color-brand-navy: #10384F;
+    --color-brand-green: #89D329;
+    --color-brand-teal: #00617F;
+
+    --color-cyan-50:  #EAF9FF;
+    --color-cyan-100: #CFF1FF;
+    --color-cyan-600: #0099D6;
+    --color-cyan-700: #00537A;
+
+    --color-navy-600: #0C2C3E;
+    --color-navy-500: #10384F;
+    --color-navy-400: #1B4A63;
+    --color-navy-300: #2E5F79;
+
+    --gray-25:  #FAFBFC;
+    --gray-50:  #F4F6F8;
+    --gray-100: #E9EDF1;
+    --gray-200: #DCE2E8;
+    --gray-300: #C2CBD3;
+    --gray-400: #9AA6B2;
+    --gray-500: #6B7684;
+    --gray-600: #4C5661;
+    --gray-700: #333B45;
+    --gray-800: #1F252C;
+    --gray-900: #12161B;
+
+    --bg-page: var(--gray-25);
+    --border-default: var(--gray-200);
+    --border-strong: var(--gray-300);
+
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-500);
+    --text-tertiary: var(--gray-400);
+
+    --state-success: var(--color-brand-green);
+    --state-success-bg: #F1FAE3;
+    --state-info: var(--color-brand-cyan);
+    --state-info-bg: var(--color-cyan-50);
+    --state-warning: #E0A100;
+    --state-warning-bg: #FBF2DA;
+    --state-error: #E2483D;
+    --state-error-bg: #FCEAE9;
+    --state-plan: #5B4B9E;
+    --state-plan-bg: #EEEBFB;
+
+    --proj-cyan:   #00BCFF;
+    --proj-teal:   #00617F;
+    --proj-plum:   #9457C9;
+
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --space-4: 16px; --space-6: 24px; --space-8: 32px;
+    --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-pill: 999px;
+
+    --shadow-1: 0 1px 2px rgba(16,56,79,0.06), 0 1px 1px rgba(16,56,79,0.04);
+    --shadow-2: 0 4px 12px rgba(16,56,79,0.10), 0 2px 4px rgba(16,56,79,0.06);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:var(--font-family); background:var(--bg-page); color:var(--text-primary); -webkit-font-smoothing:antialiased; font-size:14px; line-height:1.5; }
+
+  .shell{ display:flex; min-height:100vh; }
+
+  /* Sidebar (reused) */
+  .sidebar{ width:240px; flex-shrink:0; background:var(--color-navy-500); color:#fff; padding:24px 12px; display:flex; flex-direction:column; gap:24px; }
+  .sidebar-brand{ display:flex; align-items:center; gap:8px; padding:0 12px 16px; font-weight:700; font-size:15px; }
+  .sidebar-brand .mark{ width:22px; height:22px; border-radius:6px; background:var(--color-brand-cyan); display:flex; align-items:center; justify-content:center; color:var(--color-navy-500); font-weight:700; font-size:12px; }
+  .nav-group{ display:flex; flex-direction:column; gap:2px; }
+  .nav-item{ display:flex; align-items:center; gap:12px; padding:9px 12px; border-radius:8px; color:#93A9B8; font-size:13px; font-weight:500; position:relative; }
+  .nav-item .ic{ width:16px; height:16px; flex-shrink:0; opacity:.85; }
+  .nav-item.active{ background:var(--color-navy-400); color:#fff; }
+  .nav-item.active::before{ content:""; position:absolute; left:-12px; top:6px; bottom:6px; width:3px; background:var(--color-brand-cyan); border-radius:999px; }
+  .nav-divider{ height:1px; background:var(--color-navy-300); opacity:.5; margin:8px 12px; }
+  .sidebar-bottom{ margin-top:auto; }
+  svg.lucide{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  .main{ flex:1; min-width:0; max-width:1440px; }
+
+  .topbar{ padding:20px var(--space-8) 4px; }
+  .page-title{ font-size:20px; font-weight:600; }
+  .page-desc{ font-size:13px; color:var(--text-secondary); margin-top:2px; }
+
+  .content{ padding: var(--space-8); display:flex; flex-direction:column; gap: var(--space-6); }
+
+  /* Toolbar */
+  .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .toolbar-left{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .toolbar-right{ display:flex; align-items:center; gap:8px; }
+
+  .search-bar{ display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; width:260px; color:var(--text-tertiary); font-size:13px; }
+  .search-bar input{ border:none; outline:none; font-family:inherit; font-size:13px; width:100%; color:var(--text-primary); }
+  .search-bar input::placeholder{ color:var(--text-tertiary); }
+
+  .filter-btn{ display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; font-size:12px; font-weight:500; color:var(--text-primary); cursor:default; }
+  .filter-btn:hover{ background:var(--gray-50); }
+  .filter-btn .chev{ color:var(--text-tertiary); font-size:9px; }
+  .filter-btn .count{ background:var(--color-cyan-50); color:var(--color-teal-700,var(--color-brand-teal)); font-size:10px; font-weight:700; padding:1px 6px; border-radius:999px; }
+
+  .view-toggle{ display:flex; border:1px solid var(--border-strong); border-radius:var(--radius-md); overflow:hidden; }
+  .view-toggle button{ appearance:none; border:none; background:#fff; padding:7px 10px; font-family:inherit; font-size:12px; font-weight:500; color:var(--text-secondary); display:flex; align-items:center; gap:6px; cursor:default; }
+  .view-toggle button + button{ border-left:1px solid var(--border-strong); }
+  .view-toggle button.active{ background:var(--state-info-bg); color:var(--color-teal-700,var(--color-brand-teal)); }
+
+  .btn{ appearance:none; border:none; cursor:default; font-family:inherit; font-size:13px; font-weight:600; padding:9px 14px; border-radius:var(--radius-md); display:inline-flex; align-items:center; gap:6px; }
+  .btn-primary{ background:var(--color-brand-cyan); color:var(--color-navy-500); }
+  .btn-primary:hover{ background:var(--color-cyan-600); }
+
+  /* Active filters row */
+  .active-filters{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .chip{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--text-secondary); background:var(--gray-50); border:1px solid var(--border-default); padding:4px 8px 4px 10px; border-radius:var(--radius-pill); }
+  .chip .x{ color:var(--text-tertiary); font-size:11px; }
+  .chip-clear{ font-size:12px; font-weight:600; color:var(--color-teal-700,var(--color-brand-teal)); cursor:default; }
+
+  .result-count{ font-size:12px; color:var(--text-tertiary); }
+
+  /* ===== Cards view ===== */
+  .project-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+  .project-card{ background:#fff; border:1px solid var(--border-default); border-radius:var(--radius-lg); padding:16px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--shadow-1); transition: box-shadow .12s ease, border-color .12s ease; }
+  .project-card:hover{ box-shadow:var(--shadow-2); border-color:var(--border-strong); }
+  .pc-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  .project-id{ display:flex; align-items:flex-start; gap:9px; }
+  .project-id .dot{ width:10px; height:10px; border-radius:3px; flex-shrink:0; margin-top:3px; }
+  .project-name{ font-size:14px; font-weight:600; }
+  .project-desc{ font-size:12px; color:var(--text-secondary); margin-top:1px; }
+  .menu-btn{ width:26px; height:26px; border-radius:var(--radius-sm); border:none; background:transparent; color:var(--text-tertiary); font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .menu-btn:hover{ background:var(--gray-50); color:var(--text-secondary); }
+
+  .status{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:500; width:fit-content; padding:3px 8px; border-radius:var(--radius-pill); }
+  .status-dot{ width:7px; height:7px; border-radius:50%; }
+  .status.dev{ background:var(--state-info-bg); color:var(--color-teal-700,var(--color-brand-teal)); }
+  .status.plan{ background:var(--state-plan-bg); color:var(--state-plan); }
+
+  .progress-track{ height:6px; border-radius:999px; background:var(--gray-100); overflow:hidden; }
+  .progress-fill{ height:100%; border-radius:999px; background:var(--color-brand-cyan); }
+  .progress-row{ display:flex; align-items:center; gap:10px; }
+  .progress-row .progress-track{ flex:1; }
+  .progress-row .pct{ font-size:11.5px; font-weight:600; color:var(--text-secondary); width:30px; text-align:right; }
+
+  .meta-line{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--text-secondary); }
+  .meta-line .label{ color:var(--text-tertiary); }
+
+  .divider{ height:1px; background:var(--border-default); border:none; margin:2px 0; }
+
+  .pc-row{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; }
+  .pc-responsible{ display:flex; align-items:center; gap:6px; color:var(--text-secondary); }
+  .avatar-sm{ width:20px; height:20px; border-radius:50%; background:var(--color-navy-400); color:#fff; display:flex; align-items:center; justify-content:center; font-size:9.5px; font-weight:600; flex-shrink:0; }
+
+  .priority{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; }
+  .priority-bars{ display:flex; align-items:flex-end; gap:2px; height:9px; }
+  .priority-bars span{ width:3px; border-radius:1px; background:var(--gray-300); }
+  .priority-bars span:nth-child(1){ height:4px; } .priority-bars span:nth-child(2){ height:6.5px; } .priority-bars span:nth-child(3){ height:9px; }
+
+  .jira-chip{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--text-secondary); background:var(--gray-50); border:1px solid var(--border-default); padding:3px 8px; border-radius:var(--radius-sm); }
+  .next-milestone{ font-size:11.5px; color:var(--text-secondary); display:flex; align-items:center; gap:5px; }
+  .next-milestone b{ color:var(--text-primary); font-weight:600; }
+
+  /* ===== List view ===== */
+  .list-view{ display:none; background:#fff; border:1px solid var(--border-default); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-1); }
+  table.projects-table{ width:100%; border-collapse:collapse; }
+  table.projects-table th{ text-align:left; font-size:11px; font-weight:600; color:var(--text-secondary); padding:10px 14px; background:var(--gray-25); border-bottom:1px solid var(--border-default); white-space:nowrap; }
+  table.projects-table td{ padding:12px 14px; font-size:12.5px; border-bottom:1px solid var(--border-default); vertical-align:middle; }
+  table.projects-table tbody tr:hover{ background:var(--gray-25); }
+  table.projects-table tbody tr:last-child td{ border-bottom:none; }
+  .row-name{ display:flex; align-items:center; gap:9px; }
+  .row-name .dot{ width:9px; height:9px; border-radius:3px; flex-shrink:0; }
+  .row-name-text{ font-weight:600; font-size:13px; }
+  .row-desc{ font-size:11.5px; color:var(--text-secondary); }
+  table.projects-table .progress-row{ width:120px; }
+
+  .view-cards.hidden, .view-list.hidden{ display:none; }
+
+  a.nav-item, a.nav-subitem{ text-decoration:none; cursor:pointer; }
+  .nav-subgroup{ display:flex; flex-direction:column; gap:1px; margin:2px 0 4px 12px; padding-left:12px; border-left:1px solid var(--color-navy-300); }
+  .nav-subitem{ display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:6px; color:#93A9B8; font-size:12.5px; font-weight:500; }
+  .nav-subitem:hover{ background:var(--color-navy-400); color:#fff; }
+  .nav-subitem.active-sub{ background:var(--color-navy-400); color:#fff; font-weight:600; }
+  .nav-subitem .subdot{ width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">PH</span> Project Hub</div>
+    <div class="nav-group">
+      <a class="nav-item" href="project-hub-dashboard.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</a>
+      <a class="nav-item active" href="project-hub-proyectos.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Proyectos</a>
+      <div class="nav-subgroup">
+        <a class="nav-subitem" href="project-hub-loyalty.html"><span class="subdot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-teal)"></span>App Delivery</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-plum)"></span>CRM — Segmentación</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html">Otros proyectos...</a>
+      </div>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M4 6h9M4 12h13M4 18h6"/></svg>Gantt general</a>
+      <a class="nav-item" href="project-hub-tareas.html"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tareas</a>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>Documentos</a>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="sidebar-bottom nav-group">
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 00-2-1.2L14 3h-4l-.6 2.6a7 7 0 00-2 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 000 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 002 1.2L10 21h4l.6-2.6a7 7 0 002-1.2l2.3.9 2-3.4-2-1.5c.07-.4.1-.8.1-1.2z"/></svg>Configuración</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Proyectos</div>
+      <div class="page-desc">Gestiona y da seguimiento a todos tus proyectos.</div>
+    </div>
+
+    <div class="content">
+
+      <!-- Toolbar: search + filters + view toggle + primary action -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="search-bar">
+            <svg class="lucide" viewBox="0 0 24 24" style="width:14px;height:14px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="text" placeholder="Buscar proyectos...">
+          </div>
+          <button class="filter-btn">Estado <span class="chev">▾</span></button>
+          <button class="filter-btn">Responsable <span class="chev">▾</span></button>
+          <button class="filter-btn">Prioridad <span class="chev">▾</span></button>
+          <button class="filter-btn">Fecha <span class="chev">▾</span></button>
+        </div>
+        <div class="toolbar-right">
+          <div class="view-toggle">
+            <button class="active" id="btn-cards" onclick="setView('cards')">
+              <svg class="lucide" viewBox="0 0 24 24" style="width:13px;height:13px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Cards
+            </button>
+            <button id="btn-list" onclick="setView('list')">
+              <svg class="lucide" viewBox="0 0 24 24" style="width:13px;height:13px;"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+              Lista
+            </button>
+          </div>
+          <button class="btn btn-primary">+ Nuevo proyecto</button>
+        </div>
+      </div>
+
+      <div class="result-count">3 proyectos</div>
+
+      <!-- ===== CARDS VIEW ===== -->
+      <div class="view-cards" id="view-cards">
+        <div class="project-grid">
+
+          <a class="project-card" href="project-hub-loyalty.html" style="text-decoration:none;color:inherit;">
+            <div class="pc-top">
+              <div class="project-id">
+                <span class="dot" style="background:var(--proj-cyan)"></span>
+                <div><div class="project-name">Loyalty</div><div class="project-desc">Pago con puntos</div></div>
+              </div>
+              <button class="menu-btn">⋯</button>
+            </div>
+            <span class="status dev"><span class="status-dot" style="background:var(--color-brand-cyan)"></span>En desarrollo</span>
+            <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:72%"></div></div><div class="pct">72%</div></div>
+            <div class="meta-line"><span class="label">Fechas</span><span>01 Sep — 30 Sep</span></div>
+            <hr class="divider">
+            <div class="pc-row">
+              <div class="pc-responsible"><div class="avatar-sm">CC</div>Carlita</div>
+              <span class="priority" style="color:#8A6200;"><span class="priority-bars"><span style="background:var(--state-warning)"></span><span style="background:var(--state-warning)"></span><span style="background:var(--state-warning)"></span></span>Alta</span>
+            </div>
+            <div class="pc-row">
+              <span class="jira-chip">🎫 ABC-123</span>
+              <div class="next-milestone">◆ <b>QA · 21 Sep</b></div>
+            </div>
+          </a>
+
+          <div class="project-card">
+            <div class="pc-top">
+              <div class="project-id">
+                <span class="dot" style="background:var(--proj-teal)"></span>
+                <div><div class="project-name">API Pedidos</div><div class="project-desc">Integración de pedidos NGR</div></div>
+              </div>
+              <button class="menu-btn">⋯</button>
+            </div>
+            <span class="status dev"><span class="status-dot" style="background:var(--color-brand-cyan)"></span>En desarrollo</span>
+            <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:54%; background:var(--proj-teal)"></div></div><div class="pct">54%</div></div>
+            <div class="meta-line"><span class="label">Fechas</span><span>05 Sep — 15 Oct</span></div>
+            <hr class="divider">
+            <div class="pc-row">
+              <div class="pc-responsible"><div class="avatar-sm" style="background:var(--proj-teal)">JR</div>Jorge R.</div>
+              <span class="priority" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="priority-bars"><span style="background:var(--color-brand-teal)"></span><span style="background:var(--color-brand-teal)"></span><span></span></span>Media</span>
+            </div>
+            <div class="pc-row">
+              <span class="jira-chip">🎫 ABC-145</span>
+              <div class="next-milestone">◆ <b>API listo · 25 Sep</b></div>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="pc-top">
+              <div class="project-id">
+                <span class="dot" style="background:var(--proj-plum)"></span>
+                <div><div class="project-name">CRM</div><div class="project-desc">Integración CRM</div></div>
+              </div>
+              <button class="menu-btn">⋯</button>
+            </div>
+            <span class="status plan"><span class="status-dot" style="background:var(--proj-plum)"></span>En planificación</span>
+            <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:25%; background:var(--proj-plum)"></div></div><div class="pct">25%</div></div>
+            <div class="meta-line"><span class="label">Fechas</span><span>20 Sep — 30 Oct</span></div>
+            <hr class="divider">
+            <div class="pc-row">
+              <div class="pc-responsible"><div class="avatar-sm">CC</div>Carlita</div>
+              <span class="priority" style="color:var(--text-secondary);"><span class="priority-bars"><span style="background:var(--gray-400)"></span><span></span><span></span></span>Baja</span>
+            </div>
+            <div class="pc-row">
+              <span class="jira-chip">🎫 ABC-167</span>
+              <div class="next-milestone">◆ <b>Kickoff técnico · 22 Sep</b></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== LIST VIEW ===== -->
+      <div class="view-list hidden" id="view-list">
+        <div class="list-view" style="display:block;">
+          <table class="projects-table">
+            <thead>
+              <tr>
+                <th>Proyecto</th><th>Estado</th><th>Progreso</th><th>Fechas</th><th>Responsable</th><th>Prioridad</th><th>Jira principal</th><th>Próximo hito</th><th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a class="row-name" href="project-hub-loyalty.html" style="text-decoration:none;color:inherit;"><span class="dot" style="background:var(--proj-cyan)"></span><div><div class="row-name-text">Loyalty</div><div class="row-desc">Pago con puntos</div></div></a></td>
+                <td><span class="status dev"><span class="status-dot" style="background:var(--color-brand-cyan)"></span>En desarrollo</span></td>
+                <td><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:72%"></div></div><div class="pct">72%</div></div></td>
+                <td>01 Sep — 30 Sep</td>
+                <td><div class="pc-responsible"><div class="avatar-sm">CC</div>Carlita</div></td>
+                <td><span class="priority" style="color:#8A6200;"><span class="priority-bars"><span style="background:var(--state-warning)"></span><span style="background:var(--state-warning)"></span><span style="background:var(--state-warning)"></span></span>Alta</span></td>
+                <td><span class="jira-chip">ABC-123</span></td>
+                <td>QA · 21 Sep</td>
+                <td><button class="menu-btn">⋯</button></td>
+              </tr>
+              <tr>
+                <td><div class="row-name"><span class="dot" style="background:var(--proj-teal)"></span><div><div class="row-name-text">API Pedidos</div><div class="row-desc">Integración de pedidos NGR</div></div></div></td>
+                <td><span class="status dev"><span class="status-dot" style="background:var(--color-brand-cyan)"></span>En desarrollo</span></td>
+                <td><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:54%; background:var(--proj-teal)"></div></div><div class="pct">54%</div></div></td>
+                <td>05 Sep — 15 Oct</td>
+                <td><div class="pc-responsible"><div class="avatar-sm" style="background:var(--proj-teal)">JR</div>Jorge R.</div></td>
+                <td><span class="priority" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="priority-bars"><span style="background:var(--color-brand-teal)"></span><span style="background:var(--color-brand-teal)"></span><span></span></span>Media</span></td>
+                <td><span class="jira-chip">ABC-145</span></td>
+                <td>API listo · 25 Sep</td>
+                <td><button class="menu-btn">⋯</button></td>
+              </tr>
+              <tr>
+                <td><div class="row-name"><span class="dot" style="background:var(--proj-plum)"></span><div><div class="row-name-text">CRM</div><div class="row-desc">Integración CRM</div></div></div></td>
+                <td><span class="status plan"><span class="status-dot" style="background:var(--proj-plum)"></span>En planificación</span></td>
+                <td><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:25%; background:var(--proj-plum)"></div></div><div class="pct">25%</div></div></td>
+                <td>20 Sep — 30 Oct</td>
+                <td><div class="pc-responsible"><div class="avatar-sm">CC</div>Carlita</div></td>
+                <td><span class="priority" style="color:var(--text-secondary);"><span class="priority-bars"><span style="background:var(--gray-400)"></span><span></span><span></span></span>Baja</span></td>
+                <td><span class="jira-chip">ABC-167</span></td>
+                <td>Kickoff técnico · 22 Sep</td>
+                <td><button class="menu-btn">⋯</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function setView(view){
+    const cards = document.getElementById('view-cards');
+    const list = document.getElementById('view-list');
+    const btnCards = document.getElementById('btn-cards');
+    const btnList = document.getElementById('btn-list');
+    if(view === 'cards'){
+      cards.classList.remove('hidden');
+      list.classList.add('hidden');
+      btnCards.classList.add('active');
+      btnList.classList.remove('active');
+    } else {
+      cards.classList.add('hidden');
+      list.classList.remove('hidden');
+      btnList.classList.add('active');
+      btnCards.classList.remove('active');
+    }
+  }
+</script>
+
+</body>
+</html>

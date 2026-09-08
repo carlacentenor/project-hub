@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Hub — Plan de trabajo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-brand-cyan: #00BCFF;
+    --color-brand-navy: #10384F;
+    --color-brand-green: #89D329;
+    --color-brand-teal: #00617F;
+    --color-cyan-50:  #EAF9FF;
+    --color-cyan-100: #CFF1FF;
+    --color-cyan-600: #0099D6;
+    --color-cyan-700: #00537A;
+    --color-navy-600: #0C2C3E;
+    --color-navy-500: #10384F;
+    --color-navy-400: #1B4A63;
+    --color-navy-300: #2E5F79;
+    --gray-25:  #FAFBFC;
+    --gray-50:  #F4F6F8;
+    --gray-100: #E9EDF1;
+    --gray-200: #DCE2E8;
+    --gray-300: #C2CBD3;
+    --gray-400: #9AA6B2;
+    --gray-500: #6B7684;
+    --gray-600: #4C5661;
+    --gray-700: #333B45;
+    --gray-800: #1F252C;
+    --gray-900: #12161B;
+    --bg-page: var(--gray-25);
+    --border-default: var(--gray-200);
+    --border-strong: var(--gray-300);
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-500);
+    --text-tertiary: var(--gray-400);
+    --state-success: var(--color-brand-green);
+    --state-success-bg: #F1FAE3;
+    --state-info: var(--color-brand-cyan);
+    --state-info-bg: var(--color-cyan-50);
+    --state-warning: #E0A100;
+    --state-warning-bg: #FBF2DA;
+    --state-error: #E2483D;
+    --state-error-bg: #FCEAE9;
+    --proj-cyan:   #00BCFF;
+    --proj-teal:   #00617F;
+    --proj-plum:   #9457C9;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl:16px; --radius-pill: 999px;
+    --shadow-1: 0 1px 2px rgba(16,56,79,0.06), 0 1px 1px rgba(16,56,79,0.04);
+    --shadow-2: 0 4px 12px rgba(16,56,79,0.10), 0 2px 4px rgba(16,56,79,0.06);
+    --shadow-3: 0 16px 40px rgba(16,56,79,0.16), 0 4px 10px rgba(16,56,79,0.08);
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{ font-family:var(--font-family); background:var(--bg-page); color:var(--text-primary); -webkit-font-smoothing:antialiased; font-size:14px; line-height:1.5; }
+  .shell{ display:flex; min-height:100vh; }
+
+  /* Sidebar */
+  .sidebar{ width:240px; flex-shrink:0; background:var(--color-navy-500); color:#fff; padding:24px 12px; display:flex; flex-direction:column; gap:24px; }
+  .sidebar-brand{ display:flex; align-items:center; gap:8px; padding:0 12px 16px; font-weight:700; font-size:15px; }
+  .sidebar-brand .mark{ width:22px; height:22px; border-radius:6px; background:var(--color-brand-cyan); display:flex; align-items:center; justify-content:center; color:var(--color-navy-500); font-weight:700; font-size:12px; }
+  .nav-group{ display:flex; flex-direction:column; gap:2px; }
+  .nav-item{ display:flex; align-items:center; gap:12px; padding:9px 12px; border-radius:8px; color:#93A9B8; font-size:13px; font-weight:500; position:relative; text-decoration:none; }
+  .nav-item .ic{ width:16px; height:16px; flex-shrink:0; opacity:.85; }
+  .nav-item.active{ background:var(--color-navy-400); color:#fff; }
+  .nav-item.active::before{ content:""; position:absolute; left:-12px; top:6px; bottom:6px; width:3px; background:var(--color-brand-cyan); border-radius:999px; }
+  .nav-divider{ height:1px; background:var(--color-navy-300); opacity:.5; margin:8px 12px; }
+  .sidebar-bottom{ margin-top:auto; }
+  svg.lucide{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .nav-subgroup{ display:flex; flex-direction:column; gap:1px; margin:2px 0 4px 12px; padding-left:12px; border-left:1px solid var(--color-navy-300); }
+  .nav-subitem{ display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:6px; color:#93A9B8; font-size:12.5px; font-weight:500; text-decoration:none; }
+  .nav-subitem:hover{ background:var(--color-navy-400); color:#fff; }
+  .nav-subitem.active-sub{ background:var(--color-navy-400); color:#fff; font-weight:600; }
+  .nav-subitem .subdot{ width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+
+  .main{ flex:1; min-width:0; display:flex; flex-direction:column; }
+
+  /* Contextual subnavbar */
+  .subnav{ background:#fff; border-bottom:1px solid var(--border-default); padding: 14px 32px 0; }
+  .subnav-top{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .back-link{ display:flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; color:var(--text-secondary); text-decoration:none; }
+  .back-link:hover{ color:var(--text-primary); }
+  .subnav-sep{ color:var(--border-strong); }
+  .subnav-project-name{ font-size:13px; font-weight:600; color:var(--text-primary); }
+  .status-pill{ display:inline-flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; letter-spacing:0.02em; padding:3px 9px; border-radius:999px; background:var(--state-success-bg); color:#4C7A0E; margin-left:4px; }
+  .subnav-tabs{ display:flex; gap:4px; }
+  .subnav-tab{ padding:9px 4px; font-size:13px; font-weight:500; color:var(--text-secondary); text-decoration:none; border-bottom:2px solid transparent; margin:0 10px; }
+  .subnav-tab:hover{ color:var(--text-primary); }
+  .subnav-tab.active{ color:var(--color-teal-700, var(--color-brand-teal)); border-bottom-color:var(--color-brand-cyan); font-weight:600; }
+
+  .page-header{ padding:20px 32px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .ph-title{ font-size:20px; font-weight:700; }
+  .ph-desc{ font-size:13px; color:var(--text-secondary); margin-top:4px; max-width:560px; }
+  .ph-actions{ display:flex; gap:8px; flex-shrink:0; }
+  .btn{ appearance:none; border:none; cursor:default; font-family:inherit; font-size:13px; font-weight:600; padding:9px 14px; border-radius:var(--radius-md); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  .btn-primary{ background:var(--color-brand-cyan); color:var(--color-navy-500); }
+  .btn-primary:hover{ background:var(--color-cyan-600); }
+  .btn-secondary{ background:#fff; color:var(--color-navy-500); border:1px solid var(--border-strong); }
+  .btn-secondary:hover{ background:var(--gray-50); }
+  .btn-icon{ width:34px; height:34px; padding:0; justify-content:center; background:#fff; border:1px solid var(--border-strong); color:var(--text-secondary); border-radius:var(--radius-md); }
+  .btn-icon:hover{ background:var(--gray-50); }
+
+  /* Toolbar */
+  .toolbar{ padding:14px 32px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; border-bottom:1px solid var(--border-default); background:#fff; }
+  .toolbar-left{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .tb-btn{ display:inline-flex; align-items:center; gap:6px; padding:7px 11px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; font-size:12px; font-weight:500; color:var(--text-primary); cursor:default; }
+  .tb-btn:hover{ background:var(--gray-50); }
+  .tb-btn .chev{ color:var(--text-tertiary); font-size:9px; }
+  .tb-btn .count{ background:var(--color-cyan-50); color:var(--color-teal-700,var(--color-brand-teal)); font-size:10px; font-weight:700; padding:1px 6px; border-radius:999px; }
+  .tb-sep{ width:1px; height:18px; background:var(--border-default); margin:0 4px; }
+  .tb-toggle{ display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--text-secondary); }
+  .tb-toggle input{ accent-color:var(--color-brand-cyan); width:14px; height:14px; }
+  .zoom-group{ display:flex; align-items:center; gap:2px; border:1px solid var(--border-strong); border-radius:var(--radius-md); overflow:hidden; }
+  .zoom-group button{ border:none; background:#fff; width:26px; height:26px; font-size:13px; color:var(--text-secondary); cursor:default; }
+  .zoom-group button:hover{ background:var(--gray-50); }
+  .zoom-group .zoom-label{ font-size:12px; font-weight:600; padding:0 8px; color:var(--text-primary); }
+  .toolbar-right{ display:flex; align-items:center; gap:8px; }
+  .search-bar{ display:flex; align-items:center; gap:8px; padding:7px 11px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; width:200px; color:var(--text-tertiary); font-size:12.5px; }
+  .search-bar input{ border:none; outline:none; font-family:inherit; font-size:12.5px; width:100%; color:var(--text-primary); }
+
+  /* Summary strip */
+  .summary-strip{ padding:12px 32px; background:#fff; border-bottom:1px solid var(--border-default); display:flex; align-items:center; gap:28px; flex-wrap:wrap; }
+  .ss-item{ font-size:12.5px; color:var(--text-secondary); display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .ss-item b{ color:var(--text-primary); font-weight:700; }
+  .ss-dot{ width:6px; height:6px; border-radius:50%; }
+  .ss-progress{ display:flex; align-items:center; gap:8px; flex:1; min-width:160px; max-width:260px; }
+  .ss-progress .track{ flex:1; height:6px; border-radius:999px; background:var(--gray-100); overflow:hidden; }
+  .ss-progress .fill{ height:100%; background:var(--color-brand-cyan); border-radius:999px; }
+  .ss-progress .pct{ font-size:12.5px; font-weight:700; }
+
+  /* Gantt container */
+  .gantt-wrap{ margin: 20px 32px 32px; border:1px solid var(--border-default); border-radius:var(--radius-lg); background:#fff; box-shadow:var(--shadow-1); overflow:auto; max-height:640px; position:relative; }
+  .gantt-inner{ min-width: 1360px; }
+  .grow{ display:grid; grid-template-columns: 460px repeat(30, 30px); }
+  .left-cell{ grid-column:1; position:sticky; left:0; background:#fff; z-index:2; border-right:1px solid var(--border-default); display:flex; align-items:center; gap:8px; padding:0 12px; min-height:38px; }
+  .track{ grid-column: 2 / -1; position:relative; min-height:38px; }
+  .grid-lines{ position:absolute; inset:0; background-image:linear-gradient(to right, var(--border-default) 1px, transparent 1px); background-size: 30px 100%; }
+
+  /* Header rows */
+  .gantt-head-month{ position:sticky; top:0; z-index:5; background:var(--gray-25); border-bottom:1px solid var(--border-default); }
+  .gantt-head-month .left-cell{ z-index:6; background:var(--gray-25); border-right:1px solid var(--border-default); font-size:11px; font-weight:700; color:var(--text-secondary); }
+  .gantt-head-month .track{ grid-column:2/-1; display:flex; align-items:center; padding-left:4px; font-size:11px; font-weight:700; color:var(--text-secondary); letter-spacing:0.03em; }
+
+  .gantt-head-week{ position:sticky; top:29px; z-index:5; background:var(--gray-25); border-bottom:1px solid var(--border-default); }
+  .gantt-head-week .left-cell{ z-index:6; background:var(--gray-25); border-right:1px solid var(--border-default); }
+  .week-row-track{ grid-column:2/-1; display:grid; grid-template-columns: repeat(30, 30px); }
+  .week-cell{ text-align:center; font-size:10.5px; font-weight:600; color:var(--text-tertiary); padding:6px 0; border-left:1px solid var(--border-default); }
+
+  .gantt-head-day{ position:sticky; top:58px; z-index:5; background:var(--gray-25); border-bottom:1px solid var(--border-strong); }
+  .gantt-head-day .left-cell{ z-index:6; background:var(--gray-25); border-right:1px solid var(--border-default); font-size:10.5px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.04em; }
+  .day-row-track{ grid-column:2/-1; display:grid; grid-template-columns: repeat(30, 30px); }
+  .day-cell{ text-align:center; font-size:10px; font-weight:600; color:var(--text-tertiary); padding:5px 0 6px; border-left:1px solid var(--border-default); display:flex; flex-direction:column; align-items:center; line-height:1.3; }
+  .day-cell .daynum{ font-size:9px; color:var(--text-tertiary); font-weight:500; }
+
+  /* Today line */
+  .today-line{ position:absolute; top:0; bottom:0; width:2px; background:var(--color-brand-cyan); z-index:4; pointer-events:none; }
+  .today-flag{ position:absolute; top:2px; left:4px; font-size:9px; font-weight:700; color:var(--color-brand-cyan); background:#fff; padding:1px 5px; border-radius:4px; border:1px solid var(--color-brand-cyan); white-space:nowrap; }
+
+  /* Area / group rows */
+  .area-row .left-cell{ min-height:44px; cursor:default; }
+  .area-row:hover .left-cell{ background:var(--gray-25); }
+  .chevron{ font-size:10px; color:var(--text-tertiary); width:12px; flex-shrink:0; cursor:default; }
+  .chevron.sm{ font-size:9px; margin-right:2px; }
+  .area-info{ flex:1; min-width:0; }
+  .area-name{ font-size:12px; font-weight:700; letter-spacing:0.02em; }
+  .area-sub{ font-size:11px; color:var(--text-tertiary); margin-top:1px; }
+  .status-chip{ font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px; white-space:nowrap; flex-shrink:0; }
+  .status-chip.sm{ font-size:10px; padding:2px 7px; }
+  .status-chip.done{ background:var(--state-success-bg); color:#4C7A0E; }
+  .status-chip.progress{ background:var(--state-info-bg); color:var(--color-teal-700, var(--color-brand-teal)); }
+  .status-chip.pending{ background:var(--gray-100); color:var(--text-secondary); }
+  .status-chip.blocked{ background:var(--state-error-bg); color:#A9302A; }
+
+  .bar{ position:absolute; top:9px; height:20px; border-radius:5px; display:flex; align-items:center; padding:0 8px; font-size:10.5px; font-weight:600; white-space:nowrap; overflow:hidden; }
+  .area-bar{ top:11px; height:16px; opacity:0.9; font-size:9.5px; font-weight:700; letter-spacing:0.03em; }
+  .bar-progress-label{ font-size:9.5px; font-weight:700; }
+  .lock-badge{ position:absolute; top:9px; right:4px; font-size:11px; }
+
+  /* Group label row (Backend/Frontend) */
+  .group-label-row .left-cell{ min-height:28px; background:var(--gray-25); border-right:1px solid var(--border-default); }
+  .group-label-row .track{ background:var(--gray-25); }
+  .subgroup-label{ font-size:10.5px; font-weight:700; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.04em; }
+
+  /* Task rows */
+  .task-row .left-cell{ cursor:default; gap:8px; }
+  .task-row:hover .left-cell, .task-row:hover .track{ background:rgba(0,188,255,0.04); }
+  .task-check{ width:14px; height:14px; accent-color: var(--color-brand-cyan); flex-shrink:0; }
+  .task-name{ font-size:12.5px; font-weight:500; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .row-meta{ display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .avatar-xs{ width:18px; height:18px; border-radius:50%; color:#fff; font-size:8.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .fecha-txt{ font-size:10.5px; color:var(--text-tertiary); width:58px; text-align:right; flex-shrink:0; }
+
+  .bar.done{ }
+  .bar.progress{ }
+  .bar.pending{ border:1px dashed var(--border-strong); background:var(--gray-50) !important; color:var(--text-secondary) !important; }
+  .bar.blocked{ background:var(--state-error) !important; }
+
+  /* Dependency lines (toggle) */
+  .dep-line{ position:absolute; border-left:1.5px dashed var(--border-strong); z-index:1; display:none; }
+  .show-deps .dep-line{ display:block; }
+
+  /* Bulk action bar */
+  .bulk-bar{ position:sticky; bottom:0; left:0; right:0; background:var(--color-navy-500); color:#fff; padding:12px 24px; display:none; align-items:center; justify-content:space-between; z-index:8; }
+  .bulk-bar.show{ display:flex; }
+  .bulk-count{ font-size:13px; font-weight:600; }
+  .bulk-actions{ display:flex; gap:8px; }
+  .bulk-actions button{ background:var(--color-navy-400); color:#fff; border:1px solid var(--color-navy-300); font-family:inherit; font-size:12px; font-weight:600; padding:7px 12px; border-radius:var(--radius-md); cursor:default; }
+  .bulk-actions button:hover{ background:var(--color-navy-300); }
+
+  /* Drawer */
+  .drawer-overlay{ position:fixed; inset:0; background:rgba(16,56,79,0.25); display:none; z-index:20; }
+  .drawer-overlay.open{ display:block; }
+  .drawer{ position:fixed; top:0; right:-420px; width:400px; height:100%; background:#fff; box-shadow:var(--shadow-3); z-index:21; padding:24px; overflow-y:auto; transition:right .18s ease; }
+  .drawer.open{ right:0; }
+  .drawer-head{ display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; }
+  .drawer-title{ font-size:16px; font-weight:700; max-width:300px; }
+  .drawer-close{ background:none; border:none; font-size:16px; color:var(--text-tertiary); cursor:default; }
+  .drawer-field{ margin-bottom:16px; }
+  .drawer-label{ font-size:11px; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:4px; }
+  .drawer-value{ font-size:13.5px; font-weight:500; }
+  .drawer-actions{ display:flex; gap:8px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-default); }
+
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--gray-900); color:#fff; font-size:12.5px; font-weight:500; padding:9px 16px; border-radius:var(--radius-md); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:30; }
+  .toast.show{ opacity:1; }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">PH</span> Project Hub</div>
+    <div class="nav-group">
+      <a class="nav-item" href="project-hub-dashboard.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</a>
+      <a class="nav-item active" href="project-hub-proyectos.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Proyectos</a>
+      <div class="nav-subgroup">
+        <a class="nav-subitem active-sub" href="project-hub-loyalty.html"><span class="subdot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-teal)"></span>App Delivery</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-plum)"></span>CRM — Segmentación</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html">Otros proyectos...</a>
+      </div>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M4 6h9M4 12h13M4 18h6"/></svg>Gantt general</a>
+      <a class="nav-item" href="project-hub-tareas.html"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tareas</a>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>Documentos</a>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="sidebar-bottom nav-group">
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 00-2-1.2L14 3h-4l-.6 2.6a7 7 0 00-2 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 000 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 002 1.2L10 21h4l.6-2.6a7 7 0 002-1.2l2.3.9 2-3.4-2-1.5c.07-.4.1-.8.1-1.2z"/></svg>Configuración</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <!-- Contextual subnavbar -->
+    <div class="subnav">
+      <div class="subnav-top">
+        <a class="back-link" href="project-hub-proyectos.html">← Proyectos</a>
+        <span class="subnav-sep">/</span>
+        <span class="subnav-project-name">Loyalty — Pago mixto con puntos</span>
+        <span class="status-pill">🟢 EN EJECUCIÓN</span>
+      </div>
+      <div class="subnav-tabs">
+        <a class="subnav-tab" href="project-hub-loyalty.html">Resumen</a>
+        <a class="subnav-tab active" href="project-hub-plan-trabajo.html">Plan de trabajo</a>
+        <a class="subnav-tab" href="project-hub-tareas.html">Tareas</a>
+        <a class="subnav-tab" href="#">Documentos</a>
+        <a class="subnav-tab" href="#">Notas</a>
+        <a class="subnav-tab" href="#">Riesgos</a>
+        <a class="subnav-tab" href="#">Actividad</a>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <div class="ph-title">Plan de trabajo</div>
+        <div class="ph-desc">Planificación detallada de actividades, responsables, dependencias y fechas del proyecto.</div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn btn-primary">+ Nueva tarea</button>
+        <button class="btn-icon">⋯</button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="tb-btn">Vista: Gantt <span class="chev">▾</span></button>
+        <button class="tb-btn">Filtrar <span class="count">2</span></button>
+        <button class="tb-btn">Agrupar: Área <span class="chev">▾</span></button>
+        <button class="tb-btn">Ordenar <span class="chev">▾</span></button>
+        <div class="tb-sep"></div>
+        <label class="tb-toggle"><input type="checkbox" id="depsToggle" onchange="toggleDeps(this)"> Mostrar dependencias</label>
+        <div class="tb-sep"></div>
+        <button class="tb-btn" onclick="scrollToToday()">Hoy</button>
+        <div class="zoom-group">
+          <button>−</button>
+          <span class="zoom-label">Semana</span>
+          <button>+</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <div class="search-bar">
+          <svg class="lucide" viewBox="0 0 24 24" style="width:13px;height:13px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" placeholder="Buscar tarea...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary strip -->
+    <div class="summary-strip">
+      <div class="ss-item"><b>25</b> tareas</div>
+      <div class="ss-item"><span class="ss-dot" style="background:var(--state-success)"></span><b>18</b> completadas</div>
+      <div class="ss-item"><span class="ss-dot" style="background:var(--color-brand-cyan)"></span><b>5</b> en progreso</div>
+      <div class="ss-item"><span class="ss-dot" style="background:var(--gray-300)"></span><b>2</b> pendientes</div>
+      <div class="ss-progress"><span class="ss-item" style="white-space:nowrap;">Progreso</span><div class="track"><div class="fill" style="width:72%"></div></div><span class="pct">72%</span></div>
+      <div class="ss-item">02 Sep — 30 Sep 2026</div>
+    </div>
+
+    <!-- Gantt -->
+    <div class="gantt-wrap" id="ganttWrap">
+      <div class="gantt-inner" id="ganttInner">
+
+        <!-- Header: month -->
+        <div class="grow gantt-head-month">
+          <div class="left-cell">Tarea</div>
+          <div class="track">SEP 2026</div>
+        </div>
+        <!-- Header: weeks -->
+        <div class="grow gantt-head-week">
+          <div class="left-cell"></div>
+          <div class="week-row-track">
+            <div class="week-cell" style="grid-column: span 7;">Semana 1</div><div class="week-cell" style="grid-column: span 7;">Semana 2</div><div class="week-cell" style="grid-column: span 7;">Semana 3</div><div class="week-cell" style="grid-column: span 7;">Semana 4</div><div class="week-cell" style="grid-column: span 2;">Semana 5</div>
+          </div>
+        </div>
+        <!-- Header: days -->
+        <div class="grow gantt-head-day">
+          <div class="left-cell">Responsable · Estado · Fecha</div>
+          <div class="day-row-track">
+            <div class="day-cell">L<span class="daynum">1</span></div><div class="day-cell">M<span class="daynum">2</span></div><div class="day-cell">X<span class="daynum">3</span></div><div class="day-cell">J<span class="daynum">4</span></div><div class="day-cell">V<span class="daynum">5</span></div><div class="day-cell">S<span class="daynum">6</span></div><div class="day-cell">D<span class="daynum">7</span></div><div class="day-cell">L<span class="daynum">8</span></div><div class="day-cell">M<span class="daynum">9</span></div><div class="day-cell">X<span class="daynum">10</span></div><div class="day-cell">J<span class="daynum">11</span></div><div class="day-cell">V<span class="daynum">12</span></div><div class="day-cell">S<span class="daynum">13</span></div><div class="day-cell">D<span class="daynum">14</span></div><div class="day-cell">L<span class="daynum">15</span></div><div class="day-cell">M<span class="daynum">16</span></div><div class="day-cell">X<span class="daynum">17</span></div><div class="day-cell">J<span class="daynum">18</span></div><div class="day-cell">V<span class="daynum">19</span></div><div class="day-cell">S<span class="daynum">20</span></div><div class="day-cell">D<span class="daynum">21</span></div><div class="day-cell">L<span class="daynum">22</span></div><div class="day-cell">M<span class="daynum">23</span></div><div class="day-cell">X<span class="daynum">24</span></div><div class="day-cell">J<span class="daynum">25</span></div><div class="day-cell">V<span class="daynum">26</span></div><div class="day-cell">S<span class="daynum">27</span></div><div class="day-cell">D<span class="daynum">28</span></div><div class="day-cell">L<span class="daynum">29</span></div><div class="day-cell">M<span class="daynum">30</span></div>
+          </div>
+        </div>
+
+        <!-- Rows -->
+        
+        <div class="grow area-row" data-group="negocio">
+          <div class="left-cell area-left" onclick="toggleGroup('negocio', this)">
+            <span class="chevron" id="chev-negocio">▸</span>
+            <div class="area-info">
+              <div class="area-name">NEGOCIO</div>
+              <div class="area-sub">3 tareas · 100%</div>
+            </div>
+            <span class="status-chip done">Completado</span>
+          </div>
+          <div class="track" data-track="negocio">
+            <div class="grid-lines"></div>
+            <div class="bar area-bar done" style="left:0.0%; width:13.33%; background:var(--state-success); color:var(--color-navy-500);">NEGOCIO</div>
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="negocio" data-row="t-neg-1" data-area="negocio" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-neg-1','Documento funcional','Carlita','Completado','01–02 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Documento funcional</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">01–02 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-neg-1">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:0.0%; width:3.33%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="negocio" data-row="t-neg-2" data-area="negocio" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-neg-2','Reglas de negocio','Carlita','Completado','02–04 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Reglas de negocio</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">02–04 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-neg-2">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:3.33%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="negocio" data-row="t-neg-3" data-area="negocio" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-neg-3','Criterios de aceptación','Carlita','Completado','04–05 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Criterios de aceptación</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">04–05 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-neg-3">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:10.0%; width:3.33%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow area-row" data-group="diseno">
+          <div class="left-cell area-left" onclick="toggleGroup('diseno', this)">
+            <span class="chevron" id="chev-diseno">▸</span>
+            <div class="area-info">
+              <div class="area-name">DISEÑO</div>
+              <div class="area-sub">4 tareas · 100%</div>
+            </div>
+            <span class="status-chip done">Completado</span>
+          </div>
+          <div class="track" data-track="diseno">
+            <div class="grid-lines"></div>
+            <div class="bar area-bar done" style="left:13.33%; width:16.67%; background:var(--state-success); color:var(--color-navy-500);">DISEÑO</div>
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="diseno" data-row="t-dis-1" data-area="diseno" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-dis-1','UX Flow','José','Completado','05–07 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">UX Flow</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">05–07 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dis-1">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:13.33%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="diseno" data-row="t-dis-2" data-area="diseno" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-dis-2','Diseño UI','José','Completado','07–09 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Diseño UI</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">07–09 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dis-2">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:20.0%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="diseno" data-row="t-dis-3" data-area="diseno" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-dis-3','Figma','José','Completado','07–09 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Figma</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">07–09 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dis-3">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:20.0%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="diseno" data-row="t-dis-4" data-area="diseno" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-dis-4','Validación con negocio','Carlita','Completado','09–10 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Validación con negocio</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">09–10 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dis-4">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:26.67%; width:3.33%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow area-row" data-group="desarrollo">
+          <div class="left-cell area-left" onclick="toggleGroup('desarrollo', this)">
+            <span class="chevron" id="chev-desarrollo">▾</span>
+            <div class="area-info">
+              <div class="area-name">DESARROLLO</div>
+              <div class="area-sub">9 tareas · 70%</div>
+            </div>
+            <span class="status-chip progress">En progreso</span>
+          </div>
+          <div class="track" data-track="desarrollo">
+            <div class="grid-lines"></div>
+            <div class="bar area-bar progress" style="left:23.33%; width:53.33%; background:var(--color-brand-cyan); color:var(--color-navy-500);">DESARROLLO</div>
+          </div>
+        </div>
+
+        <div class="grow group-label-row gantt-child" data-area="desarrollo">
+          <div class="left-cell">
+            <span class="subgroup-label" style="padding-left:36px;">Backend</span>
+          </div>
+          <div class="track"><div class="grid-lines"></div></div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="desarrollo" data-row="t-dev-1" data-area="desarrollo">
+          <div class="left-cell task-left" style="padding-left:42px;" onclick="openDrawer('t-dev-1','Endpoint de pedidos','José','Completado','08–10 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Endpoint de pedidos</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">08–10 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-1">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:23.33%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="desarrollo" data-row="t-dev-2" data-area="desarrollo">
+          <div class="left-cell task-left" style="padding-left:42px;" onclick="openDrawer('t-dev-2','Validación de puntos','José','Completado','10–12 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Validación de puntos</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">10–12 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-2">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:30.0%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="desarrollo" data-row="t-dev-3" data-area="desarrollo">
+          <div class="left-cell task-left" style="padding-left:42px;" onclick="openDrawer('t-dev-3','Implementación de pago mixto','José','En progreso','12–18 Sep',55)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            <span class="chevron sm" id="chev-pagomixto" onclick="event.stopPropagation(); toggleGroup('pagomixto', this)">▾</span>
+            <span class="task-name">Implementación de pago mixto</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm progress">● En progreso</span>
+              <span class="fecha-txt">12–18 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-3">
+            <div class="grid-lines"></div>
+            <div class="bar progress" style="left:36.67%; width:20.0%; background:var(--color-brand-cyan); color:var(--color-navy-500);">
+              <div class="bar-progress-label">55%</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="pagomixto" data-row="t-dev-3a" data-area="desarrollo" data-group="pagomixto">
+          <div class="left-cell task-left" style="padding-left:56px;" onclick="openDrawer('t-dev-3a','Validar request','José','Completado','12–13 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Validar request</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">12–13 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-3a">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:36.67%; width:3.33%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="pagomixto" data-row="t-dev-3b" data-area="desarrollo" data-group="pagomixto">
+          <div class="left-cell task-left" style="padding-left:56px;" onclick="openDrawer('t-dev-3b','Procesar puntos','José','Completado','13–14 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Procesar puntos</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">13–14 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-3b">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:40.0%; width:3.33%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="pagomixto" data-row="t-dev-3c" data-area="desarrollo" data-group="pagomixto">
+          <div class="left-cell task-left" style="padding-left:56px;" onclick="openDrawer('t-dev-3c','Procesar medio de pago adicional','José','En progreso','14–17 Sep',40)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Procesar medio de pago adicional</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm progress">● En progreso</span>
+              <span class="fecha-txt">14–17 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-3c">
+            <div class="grid-lines"></div>
+            <div class="bar progress" style="left:43.33%; width:10.0%; background:var(--color-brand-cyan); color:var(--color-navy-500);">
+              <div class="bar-progress-label">40%</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="pagomixto" data-row="t-dev-3d" data-area="desarrollo" data-group="pagomixto">
+          <div class="left-cell task-left" style="padding-left:56px;" onclick="openDrawer('t-dev-3d','Generar respuesta','José','Pendiente','17–18 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Generar respuesta</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">17–18 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-3d">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:53.33%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow group-label-row gantt-child" data-area="desarrollo">
+          <div class="left-cell">
+            <span class="subgroup-label" style="padding-left:36px;">Frontend</span>
+          </div>
+          <div class="track"><div class="grid-lines"></div></div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="desarrollo" data-row="t-dev-4" data-area="desarrollo">
+          <div class="left-cell task-left" style="padding-left:42px;" onclick="openDrawer('t-dev-4','Integración frontend','Carlita','En progreso','15–20 Sep',30)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Integración frontend</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm progress">● En progreso</span>
+              <span class="fecha-txt">15–20 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-4">
+            <div class="grid-lines"></div>
+            <div class="bar progress" style="left:46.67%; width:16.67%; background:var(--color-brand-cyan); color:var(--color-navy-500);">
+              <div class="bar-progress-label">30%</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="desarrollo" data-row="t-dev-5" data-area="desarrollo">
+          <div class="left-cell task-left" style="padding-left:42px;" onclick="openDrawer('t-dev-5','Mensajes de error','Carlita','Bloqueada','20–22 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Mensajes de error</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm blocked">🔒 Bloqueada</span>
+              <span class="fecha-txt">20–22 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-dev-5">
+            <div class="grid-lines"></div>
+            <div class="bar blocked" style="left:63.33%; width:6.67%; background:var(--state-error); color:#fff;">
+              
+            </div>
+            <div class="lock-badge" title="Bloqueada por: API del proveedor">🔒</div>
+          </div>
+        </div>
+
+        <div class="grow area-row" data-group="qa">
+          <div class="left-cell area-left" onclick="toggleGroup('qa', this)">
+            <span class="chevron" id="chev-qa">▸</span>
+            <div class="area-info">
+              <div class="area-name">QA</div>
+              <div class="area-sub">4 tareas · 20%</div>
+            </div>
+            <span class="status-chip progress">En progreso</span>
+          </div>
+          <div class="track" data-track="qa">
+            <div class="grid-lines"></div>
+            <div class="bar area-bar progress" style="left:56.67%; width:26.67%; background:var(--color-brand-cyan); color:var(--color-navy-500);">QA</div>
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="qa" data-row="t-qa-1" data-area="qa" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-qa-1','Diseño de casos de prueba','Carlita','Completado','18–20 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Diseño de casos de prueba</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm done">✓ Completado</span>
+              <span class="fecha-txt">18–20 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-qa-1">
+            <div class="grid-lines"></div>
+            <div class="bar done" style="left:56.67%; width:6.67%; background:var(--state-success); color:#fff;">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="qa" data-row="t-qa-2" data-area="qa" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-qa-2','Ejecución QA','Carlita','En progreso','20–24 Sep',25)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Ejecución QA</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm progress">● En progreso</span>
+              <span class="fecha-txt">20–24 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-qa-2">
+            <div class="grid-lines"></div>
+            <div class="bar progress" style="left:63.33%; width:13.33%; background:var(--color-brand-cyan); color:var(--color-navy-500);">
+              <div class="bar-progress-label">25%</div>
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="qa" data-row="t-qa-3" data-area="qa" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-qa-3','Validación de casos límite','Carlita','Pendiente','24–25 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Validación de casos límite</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">24–25 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-qa-3">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:76.67%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="qa" data-row="t-qa-4" data-area="qa" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-qa-4','Registro de incidencias','Carlita','Pendiente','25–26 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Registro de incidencias</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">25–26 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-qa-4">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:80.0%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow area-row" data-group="produccion">
+          <div class="left-cell area-left" onclick="toggleGroup('produccion', this)">
+            <span class="chevron" id="chev-produccion">▸</span>
+            <div class="area-info">
+              <div class="area-name">PRODUCCIÓN</div>
+              <div class="area-sub">4 tareas · 0%</div>
+            </div>
+            <span class="status-chip pending">Pendiente</span>
+          </div>
+          <div class="track" data-track="produccion">
+            <div class="grid-lines"></div>
+            <div class="bar area-bar pending" style="left:83.33%; width:13.33%; background:var(--gray-300); color:var(--text-secondary);">PRODUCCIÓN</div>
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="produccion" data-row="t-prod-1" data-area="produccion" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-prod-1','Preparación de release','José','Pendiente','26–27 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Preparación de release</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">26–27 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-prod-1">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:83.33%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="produccion" data-row="t-prod-2" data-area="produccion" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-prod-2','Deploy','José','Pendiente','27–28 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Deploy</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">27–28 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-prod-2">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:86.67%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="produccion" data-row="t-prod-3" data-area="produccion" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-prod-3','Smoke test','Carlita','Pendiente','28–29 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Smoke test</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">28–29 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-prod-3">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:90.0%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+        <div class="grow task-row gantt-child" data-group="produccion" data-row="t-prod-4" data-area="produccion" style="display:none;">
+          <div class="left-cell task-left" style="padding-left:28px;" onclick="openDrawer('t-prod-4','Validación final','Carlita','Pendiente','29–30 Sep',null)">
+            <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleSelect(this)">
+            
+            <span class="task-name">Validación final</span>
+            <div class="row-meta">
+              <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+              <span class="status-chip sm pending">○ Pendiente</span>
+              <span class="fecha-txt">29–30 Sep</span>
+            </div>
+          </div>
+          <div class="track" data-track="t-prod-4">
+            <div class="grid-lines"></div>
+            <div class="bar pending" style="left:93.33%; width:3.33%; background:var(--gray-200); color:var(--text-secondary);">
+              
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Today line overlay -->
+      <div class="today-line" id="todayLine" style="left:640px;">
+        <div class="today-flag">Hoy · 7 Sep</div>
+      </div>
+    </div>
+
+    <!-- Bulk action bar -->
+    <div class="bulk-bar" id="bulkBar">
+      <span class="bulk-count" id="bulkCount">0 tareas seleccionadas</span>
+      <div class="bulk-actions">
+        <button>Asignar</button>
+        <button>Cambiar estado</button>
+        <button>Mover</button>
+        <button>Eliminar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Task drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="drawer-title" id="drawerTitle">Tarea</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-field"><div class="drawer-label">Estado</div><div class="drawer-value" id="drawerEstado">—</div></div>
+  <div class="drawer-field"><div class="drawer-label">Responsable</div><div class="drawer-value" id="drawerResp">—</div></div>
+  <div class="drawer-field"><div class="drawer-label">Área</div><div class="drawer-value">Desarrollo</div></div>
+  <div class="drawer-field"><div class="drawer-label">Fecha</div><div class="drawer-value" id="drawerFecha">—</div></div>
+  <div class="drawer-field" id="drawerProgressField"><div class="drawer-label">Progreso</div><div class="drawer-value" id="drawerProgress">—</div></div>
+  <div class="drawer-field"><div class="drawer-label">Dependencias</div><div class="drawer-value" style="color:var(--text-secondary); font-size:12.5px;">Sin dependencias registradas</div></div>
+  <div class="drawer-field"><div class="drawer-label">Descripción</div><div class="drawer-value" style="font-weight:400; font-size:12.5px; color:var(--text-secondary);">Sin descripción todavía.</div></div>
+  <div class="drawer-actions">
+    <button class="btn btn-secondary">Editar</button>
+    <button class="btn btn-primary">Completar</button>
+    <button class="btn-icon">⋯</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">Fecha actualizada</div>
+
+<script>
+  function toggleGroup(id, el){
+    const AREA_IDS = ['negocio','diseno','desarrollo','qa','produccion'];
+    const chev = document.getElementById('chev-' + id);
+    let selector;
+    if (AREA_IDS.includes(id)) {
+      selector = '[data-area="' + id + '"]';
+    } else {
+      selector = '[data-group="' + id + '"]';
+    }
+    const rows = document.querySelectorAll('.gantt-child' + selector);
+    let willShow = false;
+    rows.forEach(r => { if (r.style.display === 'none') willShow = true; });
+    rows.forEach(r => { r.style.display = willShow ? '' : 'none'; });
+    if (chev) chev.textContent = willShow ? '▾' : '▸';
+  }
+
+  function handleSelect(cb){
+    const all = document.querySelectorAll('.task-check:checked');
+    const bar = document.getElementById('bulkBar');
+    const count = document.getElementById('bulkCount');
+    if (all.length > 0){
+      bar.classList.add('show');
+      count.textContent = all.length + (all.length === 1 ? ' tarea seleccionada' : ' tareas seleccionadas');
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  function openDrawer(id, name, resp, estado, fecha, progress){
+    document.getElementById('drawerTitle').textContent = name;
+    document.getElementById('drawerEstado').textContent = estado;
+    document.getElementById('drawerResp').textContent = resp;
+    document.getElementById('drawerFecha').textContent = fecha;
+    const pf = document.getElementById('drawerProgressField');
+    if (progress !== null && progress !== undefined){
+      pf.style.display = '';
+      document.getElementById('drawerProgress').textContent = progress + '%';
+    } else {
+      pf.style.display = 'none';
+    }
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+  }
+  function closeDrawer(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+  }
+
+  function toggleDeps(cb){
+    document.getElementById('ganttInner').parentElement.classList.toggle('show-deps', cb.checked);
+  }
+
+  function scrollToToday(){
+    const wrap = document.getElementById('ganttWrap');
+    const line = document.getElementById('todayLine');
+    const targetLeft = line.offsetLeft - 200;
+    wrap.scrollTo({ left: Math.max(0, targetLeft), behavior:'smooth' });
+    showToast('Timeline centrado en hoy');
+  }
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+</script>
+
+</body>
+</html>

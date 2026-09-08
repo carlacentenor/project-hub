@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Hub — Tareas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-brand-cyan: #00BCFF; --color-brand-navy: #10384F; --color-brand-green: #89D329; --color-brand-teal: #00617F;
+    --color-cyan-50:#EAF9FF; --color-cyan-100:#CFF1FF; --color-cyan-600:#0099D6; --color-cyan-700:#00537A;
+    --color-navy-600:#0C2C3E; --color-navy-500:#10384F; --color-navy-400:#1B4A63; --color-navy-300:#2E5F79;
+    --gray-25:#FAFBFC; --gray-50:#F4F6F8; --gray-100:#E9EDF1; --gray-200:#DCE2E8; --gray-300:#C2CBD3;
+    --gray-400:#9AA6B2; --gray-500:#6B7684; --gray-600:#4C5661; --gray-700:#333B45; --gray-800:#1F252C; --gray-900:#12161B;
+    --bg-page:var(--gray-25); --border-default:var(--gray-200); --border-strong:var(--gray-300);
+    --text-primary:var(--gray-900); --text-secondary:var(--gray-500); --text-tertiary:var(--gray-400);
+    --state-success:var(--color-brand-green); --state-success-bg:#F1FAE3;
+    --state-info:var(--color-brand-cyan); --state-info-bg:var(--color-cyan-50);
+    --state-warning:#E0A100; --state-warning-bg:#FBF2DA;
+    --state-error:#E2483D; --state-error-bg:#FCEAE9;
+    --proj-cyan:#00BCFF; --proj-teal:#00617F; --proj-plum:#9457C9;
+    --font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,56,79,0.06),0 1px 1px rgba(16,56,79,0.04);
+    --shadow-2:0 4px 12px rgba(16,56,79,0.10),0 2px 4px rgba(16,56,79,0.06);
+    --shadow-3:0 16px 40px rgba(16,56,79,0.16),0 4px 10px rgba(16,56,79,0.08);
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ font-family:var(--font-family); background:var(--bg-page); color:var(--text-primary); -webkit-font-smoothing:antialiased; font-size:14px; line-height:1.5; }
+  .shell{ display:flex; min-height:100vh; }
+
+  /* Sidebar */
+  .sidebar{ width:240px; flex-shrink:0; background:var(--color-navy-500); color:#fff; padding:24px 12px; display:flex; flex-direction:column; gap:24px; }
+  .sidebar-brand{ display:flex; align-items:center; gap:8px; padding:0 12px 16px; font-weight:700; font-size:15px; }
+  .sidebar-brand .mark{ width:22px; height:22px; border-radius:6px; background:var(--color-brand-cyan); display:flex; align-items:center; justify-content:center; color:var(--color-navy-500); font-weight:700; font-size:12px; }
+  .nav-group{ display:flex; flex-direction:column; gap:2px; }
+  .nav-item{ display:flex; align-items:center; gap:12px; padding:9px 12px; border-radius:8px; color:#93A9B8; font-size:13px; font-weight:500; position:relative; text-decoration:none; }
+  .nav-item .ic{ width:16px; height:16px; flex-shrink:0; opacity:.85; }
+  .nav-item.active{ background:var(--color-navy-400); color:#fff; }
+  .nav-item.active::before{ content:""; position:absolute; left:-12px; top:6px; bottom:6px; width:3px; background:var(--color-brand-cyan); border-radius:999px; }
+  .nav-divider{ height:1px; background:var(--color-navy-300); opacity:.5; margin:8px 12px; }
+  .sidebar-bottom{ margin-top:auto; }
+  svg.lucide{ width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .nav-subgroup{ display:flex; flex-direction:column; gap:1px; margin:2px 0 4px 12px; padding-left:12px; border-left:1px solid var(--color-navy-300); }
+  .nav-subitem{ display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:6px; color:#93A9B8; font-size:12.5px; font-weight:500; text-decoration:none; }
+  .nav-subitem:hover{ background:var(--color-navy-400); color:#fff; }
+  .nav-subitem .subdot{ width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+
+  .main{ flex:1; min-width:0; max-width:1520px; }
+
+  .page-header{ padding:24px 32px 0; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .ph-title{ font-size:20px; font-weight:700; }
+  .ph-desc{ font-size:13px; color:var(--text-secondary); margin-top:4px; }
+  .ph-actions{ display:flex; gap:8px; flex-shrink:0; }
+  .btn{ appearance:none; border:none; cursor:default; font-family:inherit; font-size:13px; font-weight:600; padding:9px 14px; border-radius:var(--radius-md); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  .btn-primary{ background:var(--color-brand-cyan); color:var(--color-navy-500); }
+  .btn-primary:hover{ background:var(--color-cyan-600); }
+  .btn-secondary{ background:#fff; color:var(--color-navy-500); border:1px solid var(--border-strong); }
+  .btn-secondary:hover{ background:var(--gray-50); }
+  .btn-icon{ width:34px; height:34px; padding:0; justify-content:center; background:#fff; border:1px solid var(--border-strong); color:var(--text-secondary); border-radius:var(--radius-md); }
+  .btn-icon:hover{ background:var(--gray-50); }
+
+  /* Quick filter chips */
+  .quick-filters{ display:flex; gap:8px; padding:16px 32px 0; flex-wrap:wrap; }
+  .qf-chip{ display:flex; flex-direction:column; align-items:flex-start; gap:2px; padding:10px 16px; border-radius:var(--radius-md); border:1px solid var(--border-default); background:#fff; cursor:default; min-width:88px; }
+  .qf-chip:hover{ border-color:var(--border-strong); }
+  .qf-chip.active{ border-color:var(--color-brand-cyan); background:var(--state-info-bg); }
+  .qf-label{ font-size:11px; font-weight:600; color:var(--text-secondary); }
+  .qf-value{ font-size:18px; font-weight:700; }
+  .qf-chip.warn .qf-value{ color:var(--state-error); }
+  .qf-chip.block .qf-value{ color:#A9302A; }
+
+  /* Toolbar */
+  .toolbar{ padding:14px 32px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .toolbar-left{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .search-bar{ display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; width:240px; color:var(--text-tertiary); font-size:12.5px; }
+  .search-bar input{ border:none; outline:none; font-family:inherit; font-size:12.5px; width:100%; color:var(--text-primary); }
+  .tb-btn{ display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:var(--radius-md); border:1px solid var(--border-strong); background:#fff; font-size:12px; font-weight:500; color:var(--text-primary); cursor:default; }
+  .tb-btn:hover{ background:var(--gray-50); }
+  .tb-btn .chev{ color:var(--text-tertiary); font-size:9px; }
+  .tb-btn .count{ background:var(--color-cyan-50); color:var(--color-teal-700,var(--color-brand-teal)); font-size:10px; font-weight:700; padding:1px 6px; border-radius:999px; }
+  .active-filters{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .filter-chip{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:500; color:var(--text-secondary); background:var(--gray-50); border:1px solid var(--border-default); padding:4px 8px 4px 10px; border-radius:var(--radius-pill); }
+  .filter-chip .x{ color:var(--text-tertiary); font-size:11px; cursor:default; }
+  .toolbar-right{ display:flex; align-items:center; gap:10px; }
+  .view-toggle{ display:flex; border:1px solid var(--border-strong); border-radius:var(--radius-md); overflow:hidden; }
+  .view-toggle button{ appearance:none; border:none; background:#fff; padding:7px 12px; font-family:inherit; font-size:12px; font-weight:500; color:var(--text-secondary); cursor:default; }
+  .view-toggle button + button{ border-left:1px solid var(--border-strong); }
+  .view-toggle button.active{ background:var(--state-info-bg); color:var(--color-teal-700,var(--color-brand-teal)); }
+  .result-count{ font-size:12px; color:var(--text-tertiary); white-space:nowrap; }
+
+  .content-area{ padding: 0 32px 32px; }
+
+  /* ===== LIST VIEW ===== */
+  .list-card{ background:#fff; border:1px solid var(--border-default); border-radius:var(--radius-lg); box-shadow:var(--shadow-1); overflow:hidden; }
+  .list-colheader{ display:grid; grid-template-columns: 26px minmax(220px,2.6fr) 1.6fr 110px 130px 130px 90px 110px 130px 30px; gap:10px; align-items:center; padding:10px 16px; background:var(--gray-25); border-bottom:1px solid var(--border-default); font-size:11px; font-weight:600; color:var(--text-secondary); }
+
+  .group-header{ display:flex; align-items:center; gap:10px; padding:12px 16px; background:var(--gray-25); border-bottom:1px solid var(--border-default); cursor:default; }
+  .group-header:hover{ background:var(--gray-50); }
+  .group-header .chevron{ font-size:10px; color:var(--text-tertiary); width:10px; }
+  .group-dot{ width:9px; height:9px; border-radius:3px; flex-shrink:0; }
+  .group-title{ font-size:13px; font-weight:700; }
+  .group-sub{ font-size:11.5px; color:var(--text-tertiary); margin-left:4px; }
+
+  .task-row-flat{ display:grid; grid-template-columns: 26px minmax(220px,2.6fr) 1.6fr 110px 130px 130px 90px 110px 130px 30px; gap:10px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--border-default); cursor:default; }
+  .task-row-flat:hover{ background:var(--gray-25); }
+  .task-check{ width:14px; height:14px; accent-color:var(--color-brand-cyan); }
+  .col-tarea{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .task-name{ font-size:13px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .subtask-badge{ font-size:10.5px; font-weight:600; color:var(--text-tertiary); background:var(--gray-50); border:1px solid var(--border-default); padding:1px 7px; border-radius:999px; flex-shrink:0; }
+  .lock-badge-inline{ font-size:11px; flex-shrink:0; }
+  .col-proyecto{ font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .proj-dot{ width:7px; height:7px; border-radius:2px; flex-shrink:0; }
+  .col-area{ font-size:12px; color:var(--text-secondary); }
+  .col-resp{ display:flex; align-items:center; gap:6px; }
+  .resp-name{ font-size:12px; color:var(--text-primary); }
+  .avatar-xs{ width:20px; height:20px; border-radius:50%; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .status-chip{ font-size:11px; font-weight:600; padding:3px 9px; border-radius:999px; white-space:nowrap; display:inline-flex; align-items:center; gap:4px; }
+  .status-chip.done{ background:var(--state-success-bg); color:#4C7A0E; }
+  .status-chip.progress{ background:var(--state-info-bg); color:var(--color-teal-700,var(--color-brand-teal)); }
+  .status-chip.pending{ background:var(--gray-100); color:var(--text-secondary); }
+  .status-chip.blocked{ background:var(--state-error-bg); color:#A9302A; }
+  .prio{ font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:4px; }
+  .prio-arrow{ font-size:12px; }
+  .col-fecha .fecha-main{ font-size:12.5px; font-weight:600; color:var(--text-primary); }
+  .col-fecha .fecha-sub{ font-size:10.5px; color:var(--state-error); font-weight:600; margin-top:1px; }
+  .col-fecha.overdue{ background:var(--state-error-bg); border-radius:var(--radius-sm); padding:4px 8px; margin:-4px -8px; }
+  .col-fecha.overdue .fecha-main{ color:#A9302A; }
+  .col-fecha.today .fecha-main{ color:var(--color-teal-700,var(--color-brand-teal)); }
+  .progress-track{ height:6px; border-radius:999px; background:var(--gray-100); overflow:hidden; }
+  .progress-fill{ height:100%; border-radius:999px; }
+  .progress-row{ display:flex; align-items:center; gap:8px; }
+  .progress-row .progress-track{ flex:1; }
+  .progress-row .pct{ font-size:11px; font-weight:600; color:var(--text-secondary); width:30px; text-align:right; }
+  .menu-btn{ width:24px; height:24px; border:none; background:transparent; color:var(--text-tertiary); font-size:14px; border-radius:var(--radius-sm); opacity:0; }
+  .task-row-flat:hover .menu-btn{ opacity:1; }
+  .menu-btn:hover{ background:var(--gray-100); color:var(--text-secondary); }
+
+  /* Pagination */
+  .pagination{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; }
+  .pagination .info{ font-size:12px; color:var(--text-tertiary); }
+  .pagination .pages{ display:flex; align-items:center; gap:4px; }
+  .pagination .pages button{ min-width:28px; height:28px; border-radius:var(--radius-sm); border:1px solid var(--border-default); background:#fff; font-size:12px; font-weight:500; color:var(--text-secondary); cursor:default; }
+  .pagination .pages button.active{ background:var(--color-brand-cyan); color:var(--color-navy-500); border-color:var(--color-brand-cyan); font-weight:700; }
+
+  /* ===== KANBAN VIEW ===== */
+  .kanban-board{ display:none; gap:16px; align-items:flex-start; overflow-x:auto; padding-bottom:8px; }
+  .kanban-col{ background:var(--gray-25); border:1px solid var(--border-default); border-radius:var(--radius-lg); width:270px; flex-shrink:0; display:flex; flex-direction:column; max-height:720px; }
+  .kanban-col-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--border-default); }
+  .kanban-col-title{ font-size:12.5px; font-weight:700; }
+  .kanban-col-count{ font-size:11px; font-weight:700; color:var(--text-secondary); background:#fff; border:1px solid var(--border-default); padding:1px 8px; border-radius:999px; }
+  .kanban-col-body{ padding:10px; display:flex; flex-direction:column; gap:8px; overflow-y:auto; }
+  .kanban-card{ background:#fff; border:1px solid var(--border-default); border-radius:var(--radius-md); padding:10px; display:flex; flex-direction:column; gap:6px; box-shadow:var(--shadow-1); cursor:default; }
+  .kanban-card:hover{ box-shadow:var(--shadow-2); }
+  .kc-proj{ font-size:10.5px; color:var(--text-tertiary); display:flex; align-items:center; gap:5px; }
+  .kc-name{ font-size:12.5px; font-weight:600; }
+  .kc-area{ font-size:11px; color:var(--text-secondary); }
+  .kc-foot{ display:flex; align-items:center; gap:8px; font-size:11px; }
+  .kc-date{ margin-left:auto; font-weight:600; color:var(--text-secondary); }
+  .kc-date.overdue{ color:var(--state-error); }
+  .kc-date.today{ color:var(--color-teal-700,var(--color-brand-teal)); }
+
+  /* ===== MIS TAREAS VIEW ===== */
+  .mis-tareas-view{ display:none; }
+  .mt-bucket-title{ font-size:12.5px; font-weight:700; margin:18px 0 8px; display:flex; align-items:center; gap:6px; }
+  .mt-bucket-title:first-child{ margin-top:0; }
+  .mt-item{ display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--border-default); border-radius:var(--radius-md); padding:11px 14px; margin-bottom:8px; cursor:default; }
+  .mt-item:hover{ border-color:var(--border-strong); box-shadow:var(--shadow-1); }
+  .mt-info{ flex:1; min-width:0; }
+  .mt-name{ font-size:13px; font-weight:600; }
+  .mt-meta{ font-size:11.5px; color:var(--text-secondary); display:flex; align-items:center; gap:5px; margin-top:2px; }
+
+  /* Bulk bar */
+  .bulk-bar{ position:sticky; bottom:0; background:var(--color-navy-500); color:#fff; padding:12px 24px; display:none; align-items:center; justify-content:space-between; border-radius:var(--radius-lg); margin-top:12px; }
+  .bulk-bar.show{ display:flex; }
+  .bulk-count{ font-size:13px; font-weight:600; }
+  .bulk-actions{ display:flex; gap:8px; }
+  .bulk-actions button{ background:var(--color-navy-400); color:#fff; border:1px solid var(--color-navy-300); font-family:inherit; font-size:12px; font-weight:600; padding:7px 12px; border-radius:var(--radius-md); cursor:default; }
+  .bulk-actions button:hover{ background:var(--color-navy-300); }
+
+  /* Drawer */
+  .drawer-overlay{ position:fixed; inset:0; background:rgba(16,56,79,0.25); display:none; z-index:20; }
+  .drawer-overlay.open{ display:block; }
+  .drawer{ position:fixed; top:0; right:-440px; width:420px; height:100%; background:#fff; box-shadow:var(--shadow-3); z-index:21; padding:24px; overflow-y:auto; transition:right .18s ease; }
+  .drawer.open{ right:0; }
+  .drawer-head{ display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; }
+  .drawer-title{ font-size:16px; font-weight:700; max-width:320px; }
+  .drawer-close{ background:none; border:none; font-size:16px; color:var(--text-tertiary); cursor:default; }
+  .drawer-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px; }
+  .drawer-field{ margin-bottom:0; }
+  .drawer-label{ font-size:11px; font-weight:600; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:4px; }
+  .drawer-value{ font-size:13px; font-weight:500; }
+  .drawer-sub{ border-top:1px solid var(--border-default); padding-top:16px; margin-top:16px; }
+  .drawer-sub-title{ font-size:12.5px; font-weight:700; margin-bottom:10px; }
+  .drawer-sub-count{ font-size:11.5px; font-weight:500; color:var(--text-tertiary); margin-left:6px; }
+  .subtask-line{ display:flex; align-items:center; gap:8px; font-size:12.5px; padding:5px 0; }
+  .subtask-line input{ accent-color:var(--color-brand-cyan); }
+  .subtask-line.done .subtask-name{ text-decoration:line-through; color:var(--text-tertiary); }
+  .dep-line{ font-size:12.5px; padding:6px 0; display:flex; align-items:center; gap:6px; }
+  .dep-line .dep-label{ color:var(--text-tertiary); font-size:11px; width:70px; flex-shrink:0; }
+  .doc-line{ display:flex; align-items:center; gap:8px; font-size:12.5px; padding:6px 0; }
+  .drawer-actions{ display:flex; gap:8px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-default); }
+  .activity-mini{ font-size:11.5px; color:var(--text-secondary); padding:5px 0; }
+  .activity-mini b{ color:var(--text-primary); font-weight:600; }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">PH</span> Project Hub</div>
+    <div class="nav-group">
+      <a class="nav-item" href="project-hub-dashboard.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</a>
+      <a class="nav-item" href="project-hub-proyectos.html"><svg class="ic lucide" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Proyectos</a>
+      <div class="nav-subgroup">
+        <a class="nav-subitem" href="project-hub-loyalty.html"><span class="subdot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-teal)"></span>App Delivery</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html"><span class="subdot" style="background:var(--proj-plum)"></span>CRM — Segmentación</a>
+        <a class="nav-subitem" href="project-hub-proyectos.html">Otros proyectos...</a>
+      </div>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M4 6h9M4 12h13M4 18h6"/></svg>Gantt general</a>
+      <a class="nav-item active" href="project-hub-tareas.html"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Tareas</a>
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg>Documentos</a>
+    </div>
+    <div class="nav-divider"></div>
+    <div class="sidebar-bottom nav-group">
+      <a class="nav-item" href="#"><svg class="ic lucide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 00-2-1.2L14 3h-4l-.6 2.6a7 7 0 00-2 1.2l-2.3-.9-2 3.4 2 1.5a7 7 0 000 2.4l-2 1.5 2 3.4 2.3-.9a7 7 0 002 1.2L10 21h4l.6-2.6a7 7 0 002-1.2l2.3.9 2-3.4-2-1.5c.07-.4.1-.8.1-1.2z"/></svg>Configuración</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="page-header">
+      <div>
+        <div class="ph-title">Tareas</div>
+        <div class="ph-desc">Gestiona y da seguimiento a las tareas de todos tus proyectos.</div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn btn-primary">+ Nueva tarea</button>
+        <button class="btn-icon">⋯</button>
+      </div>
+    </div>
+
+    <!-- Quick filter chips -->
+    <div class="quick-filters">
+      <div class="qf-chip active" data-qf="all" onclick="quickFilter('all', this)"><span class="qf-label">Todas</span><span class="qf-value">25</span></div>
+      <div class="qf-chip" data-qf="Pendiente" onclick="quickFilter('Pendiente', this)"><span class="qf-label">Pendientes</span><span class="qf-value">10</span></div>
+      <div class="qf-chip" data-qf="En progreso" onclick="quickFilter('En progreso', this)"><span class="qf-label">En progreso</span><span class="qf-value">5</span></div>
+      <div class="qf-chip" data-qf="Completado" onclick="quickFilter('Completado', this)"><span class="qf-label">Completadas</span><span class="qf-value">9</span></div>
+      <div class="qf-chip warn" data-qf="atrasada" onclick="quickFilter('atrasada', this)"><span class="qf-label">Atrasadas</span><span class="qf-value">2</span></div>
+      <div class="qf-chip block" data-qf="Bloqueada" onclick="quickFilter('Bloqueada', this)"><span class="qf-label">Bloqueadas</span><span class="qf-value">1</span></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-bar">
+          <svg class="lucide" viewBox="0 0 24 24" style="width:13px;height:13px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" id="taskSearch" placeholder="Buscar tareas..." oninput="searchTasks(this.value)">
+        </div>
+        <button class="tb-btn">Filtros <span class="chev">▾</span></button>
+        <button class="tb-btn">Agrupar: Proyecto <span class="chev">▾</span></button>
+        <button class="tb-btn">Ordenar <span class="chev">▾</span></button>
+      </div>
+      <div class="toolbar-right">
+        <span class="result-count" id="resultCount">25 tareas</span>
+        <div class="view-toggle">
+          <button class="active" id="vbtn-list" onclick="setTaskView('list')">Lista</button>
+          <button id="vbtn-kanban" onclick="setTaskView('kanban')">Kanban</button>
+          <button id="vbtn-mis" onclick="setTaskView('mis')">Mis tareas</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- LIST VIEW -->
+      <div id="view-list">
+        <div class="list-card">
+          <div class="list-colheader">
+            <span></span><span>Tarea</span><span>Proyecto</span><span>Área</span><span>Responsable</span><span>Estado</span><span>Prioridad</span><span>Fecha límite</span><span>Progreso</span><span></span>
+          </div>
+          <div id="taskListBody">
+            
+        <div class="group-header" data-groupkey="loyalty" onclick="toggleTaskGroup('loyalty')">
+          <span class="chevron" id="tchev-loyalty">▾</span>
+          <span class="group-dot" style="background:var(--proj-cyan)"></span>
+          <span class="group-title">Loyalty — Pago mixto con puntos</span>
+          <span class="group-sub">18 tareas · 54%</span>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="documento funcional" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t1','Documento funcional','Loyalty — Pago mixto con puntos','Negocio','Carlita','Completado','Alta','05 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Documento funcional</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Negocio</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha "><div class="fecha-main">05 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="reglas de negocio" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t2','Reglas de negocio','Loyalty — Pago mixto con puntos','Negocio','Carlita','Completado','Media','04 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Reglas de negocio</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Negocio</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">04 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="criterios de aceptación" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t3','Criterios de aceptación','Loyalty — Pago mixto con puntos','Negocio','Carlita','Completado','Media','05 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Criterios de aceptación</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Negocio</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">05 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="ux flow" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t4','UX Flow','Loyalty — Pago mixto con puntos','Diseño','Carlita','Completado','Media','06 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">UX Flow</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Diseño</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">06 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="diseño ui" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t5','Diseño UI','Loyalty — Pago mixto con puntos','Diseño','José','Completado','Media','08 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Diseño UI</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Diseño</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">08 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="figma" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t6','Figma','Loyalty — Pago mixto con puntos','Diseño','José','Completado','Baja','09 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Figma</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Diseño</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span></div>
+          <div class="col-fecha "><div class="fecha-main">09 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="endpoint de pedidos" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t7','Endpoint de pedidos','Loyalty — Pago mixto con puntos','Desarrollo','José','Completado','Alta','10 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Endpoint de pedidos</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha "><div class="fecha-main">10 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Completado" data-name="validación de puntos" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t8','Validación de puntos','Loyalty — Pago mixto con puntos','Desarrollo','José','Completado','Alta','12 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Validación de puntos</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha "><div class="fecha-main">12 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="En progreso" data-name="validar estructura del api" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t9','Validar estructura del API','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','En progreso','Alta','05 Sep',70)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Validar estructura del API</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip progress">● En progreso</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha overdue"><div class="fecha-main">05 Sep</div><div class="fecha-sub">Atrasada 2 días</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:70%; background:var(--color-brand-cyan);"></div></div><div class="pct">70%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="En progreso" data-name="implementar pago mixto" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t10','Implementar pago mixto','Loyalty — Pago mixto con puntos','Desarrollo','José','En progreso','Alta','12 Sep',45)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Implementar pago mixto</span>
+            <span class="subtask-badge">4 subtareas</span>
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip progress">● En progreso</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha "><div class="fecha-main">12 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:45%; background:var(--color-brand-cyan);"></div></div><div class="pct">45%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="En progreso" data-name="integración frontend" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t11','Integración frontend','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','En progreso','Media','14 Sep',30)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Integración frontend</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip progress">● En progreso</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">14 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:30%; background:var(--color-brand-cyan);"></div></div><div class="pct">30%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Bloqueada" data-name="mensajes de error" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t12','Mensajes de error','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','Bloqueada','Media','16 Sep',20)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Mensajes de error</span>
+            <span class="lock-badge-inline" title="Bloqueada por: API del proveedor">🔒</span>
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip blocked">🔒 Bloqueada</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">16 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:20%; background:var(--color-brand-cyan);"></div></div><div class="pct">20%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="validar casos límite" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t13','Validar casos límite','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','Pendiente','Media','Hoy',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Validar casos límite</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha today"><div class="fecha-main">Hoy</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="crear casos de prueba" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t14','Crear casos de prueba','Loyalty — Pago mixto con puntos','QA','Carlita','Pendiente','Media','16 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Crear casos de prueba</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">QA</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">16 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="ejecución qa" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t15','Ejecución QA','Loyalty — Pago mixto con puntos','QA','José','Pendiente','Media','20 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Ejecución QA</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">QA</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">20 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="registro de incidencias" data-proj="loyalty — pago mixto con puntos" data-resp="carlita" onclick="openTaskDrawer('t16','Registro de incidencias','Loyalty — Pago mixto con puntos','QA','Carlita','Pendiente','Baja','06 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Registro de incidencias</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">QA</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span></div>
+          <div class="col-fecha overdue"><div class="fecha-main">06 Sep</div><div class="fecha-sub">Atrasada 1 día</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="preparar producción" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t17','Preparar producción','Loyalty — Pago mixto con puntos','Producción','José','Pendiente','Media','28 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Preparar producción</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Producción</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">28 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="loyalty" data-estado="Pendiente" data-name="deploy" data-proj="loyalty — pago mixto con puntos" data-resp="josé" onclick="openTaskDrawer('t18','Deploy','Loyalty — Pago mixto con puntos','Producción','José','Pendiente','Baja','29 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Deploy</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+          <div class="col-area">Producción</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span></div>
+          <div class="col-fecha "><div class="fecha-main">29 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="group-header" data-groupkey="appdelivery" onclick="toggleTaskGroup('appdelivery')">
+          <span class="chevron" id="tchev-appdelivery">▾</span>
+          <span class="group-dot" style="background:var(--proj-teal)"></span>
+          <span class="group-title">App Delivery</span>
+          <span class="group-sub">5 tareas · 36%</span>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="appdelivery" data-estado="Completado" data-name="definir flujo de entrega" data-proj="app delivery" data-resp="carlita" onclick="openTaskDrawer('t19','Definir flujo de entrega','App Delivery','Negocio','Carlita','Completado','Alta','03 Sep',100)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Definir flujo de entrega</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+          <div class="col-area">Negocio</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip done">✓ Completado</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha "><div class="fecha-main">03 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="appdelivery" data-estado="En progreso" data-name="diseño de app" data-proj="app delivery" data-resp="josé" onclick="openTaskDrawer('t20','Diseño de app','App Delivery','Diseño','José','En progreso','Media','12 Sep',55)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Diseño de app</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+          <div class="col-area">Diseño</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip progress">● En progreso</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">12 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:55%; background:var(--color-brand-cyan);"></div></div><div class="pct">55%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="appdelivery" data-estado="En progreso" data-name="integración gps" data-proj="app delivery" data-resp="josé" onclick="openTaskDrawer('t21','Integración GPS','App Delivery','Desarrollo','José','En progreso','Alta','Hoy',25)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Integración GPS</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip progress">● En progreso</span></div>
+          <div class="col-prio"><span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span></div>
+          <div class="col-fecha today"><div class="fecha-main">Hoy</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:25%; background:var(--color-brand-cyan);"></div></div><div class="pct">25%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="appdelivery" data-estado="Pendiente" data-name="pruebas de entrega" data-proj="app delivery" data-resp="carlita" onclick="openTaskDrawer('t22','Pruebas de entrega','App Delivery','QA','Carlita','Pendiente','Media','22 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Pruebas de entrega</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+          <div class="col-area">QA</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">22 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="appdelivery" data-estado="Pendiente" data-name="preparar release" data-proj="app delivery" data-resp="josé" onclick="openTaskDrawer('t23','Preparar release','App Delivery','Producción','José','Pendiente','Baja','30 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Preparar release</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+          <div class="col-area">Producción</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span></div>
+          <div class="col-fecha "><div class="fecha-main">30 Sep</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="group-header" data-groupkey="crm" onclick="toggleTaskGroup('crm')">
+          <span class="chevron" id="tchev-crm">▾</span>
+          <span class="group-dot" style="background:var(--proj-plum)"></span>
+          <span class="group-title">CRM — Segmentación</span>
+          <span class="group-sub">2 tareas · 0%</span>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="crm" data-estado="Pendiente" data-name="definir segmentos" data-proj="crm — segmentación" data-resp="carlita" onclick="openTaskDrawer('t24','Definir segmentos','CRM — Segmentación','Negocio','Carlita','Pendiente','Media','Mañana',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Definir segmentos</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-plum)"></span>CRM — Segmentación</div>
+          <div class="col-area">Negocio</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--color-navy-400)">C</span><span class="resp-name">Carlita</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span></div>
+          <div class="col-fecha "><div class="fecha-main">Mañana</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+
+        <div class="task-row-flat" data-groupkey="crm" data-estado="Pendiente" data-name="mapear integraciones" data-proj="crm — segmentación" data-resp="josé" onclick="openTaskDrawer('t25','Mapear integraciones','CRM — Segmentación','Desarrollo','José','Pendiente','Baja','30 Oct',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="col-tarea">
+            <span class="task-name">Mapear integraciones</span>
+            
+          </div>
+          <div class="col-proyecto"><span class="proj-dot" style="background:var(--proj-plum)"></span>CRM — Segmentación</div>
+          <div class="col-area">Desarrollo</div>
+          <div class="col-resp"><span class="avatar-xs" style="background:var(--proj-teal)">J</span><span class="resp-name">José</span></div>
+          <div class="col-estado"><span class="status-chip pending">○ Pendiente</span></div>
+          <div class="col-prio"><span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span></div>
+          <div class="col-fecha "><div class="fecha-main">30 Oct</div></div>
+          <div class="col-progress"><div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div></div>
+          <button class="menu-btn" onclick="event.stopPropagation();">⋯</button>
+        </div>
+          </div>
+        </div>
+        <div class="pagination">
+          <div class="info">Mostrando 1–25 de 25 tareas</div>
+          <div class="pages">
+            <button disabled>‹</button>
+            <button class="active">1</button>
+            <button disabled>›</button>
+          </div>
+        </div>
+        <div class="bulk-bar" id="bulkBar">
+          <span class="bulk-count" id="bulkCount">0 tareas seleccionadas</span>
+          <div class="bulk-actions">
+            <button>Asignar</button>
+            <button>Cambiar estado</button>
+            <button>Cambiar prioridad</button>
+            <button>Mover</button>
+            <button>Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANBAN VIEW -->
+      <div class="kanban-board" id="view-kanban">
+        <div class="kanban-col"><div class="kanban-col-head"><span class="kanban-col-title">Pendiente</span><span class="kanban-col-count">10</span></div><div class="kanban-col-body">
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Validar casos límite</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date today">Hoy</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Crear casos de prueba</div>
+              <div class="kc-area">QA</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">16 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Ejecución QA</div>
+              <div class="kc-area">QA</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">20 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Registro de incidencias</div>
+              <div class="kc-area">QA</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+                <span class="kc-date overdue">06 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Preparar producción</div>
+              <div class="kc-area">Producción</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">28 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Deploy</div>
+              <div class="kc-area">Producción</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+                <span class="kc-date ">29 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+              <div class="kc-name">Pruebas de entrega</div>
+              <div class="kc-area">QA</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">22 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+              <div class="kc-name">Preparar release</div>
+              <div class="kc-area">Producción</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+                <span class="kc-date ">30 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-plum)"></span>CRM — Segmentación</div>
+              <div class="kc-name">Definir segmentos</div>
+              <div class="kc-area">Negocio</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">Mañana</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-plum)"></span>CRM — Segmentación</div>
+              <div class="kc-name">Mapear integraciones</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+                <span class="kc-date ">30 Oct</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:0%; background:var(--gray-300);"></div></div><div class="pct">0%</div></div>
+            </div>
+</div></div>
+<div class="kanban-col"><div class="kanban-col-head"><span class="kanban-col-title">En progreso</span><span class="kanban-col-count">5</span></div><div class="kanban-col-body">
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Validar estructura del API</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date overdue">05 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:70%; background:var(--color-brand-cyan);"></div></div><div class="pct">70%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Implementar pago mixto</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date ">12 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:45%; background:var(--color-brand-cyan);"></div></div><div class="pct">45%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Integración frontend</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">14 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:30%; background:var(--color-brand-cyan);"></div></div><div class="pct">30%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+              <div class="kc-name">Diseño de app</div>
+              <div class="kc-area">Diseño</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">12 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:55%; background:var(--color-brand-cyan);"></div></div><div class="pct">55%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+              <div class="kc-name">Integración GPS</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date today">Hoy</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:25%; background:var(--color-brand-cyan);"></div></div><div class="pct">25%</div></div>
+            </div>
+</div></div>
+<div class="kanban-col"><div class="kanban-col-head"><span class="kanban-col-title">Bloqueada</span><span class="kanban-col-count">1</span></div><div class="kanban-col-body">
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Mensajes de error</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">16 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:20%; background:var(--color-brand-cyan);"></div></div><div class="pct">20%</div></div>
+            </div>
+</div></div>
+<div class="kanban-col"><div class="kanban-col-head"><span class="kanban-col-title">Completado</span><span class="kanban-col-count">9</span></div><div class="kanban-col-body">
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Documento funcional</div>
+              <div class="kc-area">Negocio</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date ">05 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Reglas de negocio</div>
+              <div class="kc-area">Negocio</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">04 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Criterios de aceptación</div>
+              <div class="kc-area">Negocio</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">05 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">UX Flow</div>
+              <div class="kc-area">Diseño</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">06 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Diseño UI</div>
+              <div class="kc-area">Diseño</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+                <span class="kc-date ">08 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Figma</div>
+              <div class="kc-area">Diseño</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+                <span class="kc-date ">09 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Endpoint de pedidos</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date ">10 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos</div>
+              <div class="kc-name">Validación de puntos</div>
+              <div class="kc-area">Desarrollo</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--proj-teal)">J</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date ">12 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+
+            <div class="kanban-card" draggable="true">
+              <div class="kc-proj"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery</div>
+              <div class="kc-name">Definir flujo de entrega</div>
+              <div class="kc-area">Negocio</div>
+              <div class="kc-foot">
+                <span class="avatar-xs" style="background:var(--color-navy-400)">C</span>
+                <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+                <span class="kc-date ">03 Sep</span>
+              </div>
+              <div class="progress-row"><div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--state-success);"></div></div><div class="pct">100%</div></div>
+            </div>
+</div></div>
+      </div>
+
+      <!-- MIS TAREAS VIEW -->
+      <div class="mis-tareas-view" id="view-mis">
+        <div class="mt-bucket-title">🔴 Atrasadas</div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t9','Validar estructura del API','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','En progreso','Alta','05 Sep',70)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Validar estructura del API</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · Desarrollo</div>
+          </div>
+          <span class="prio prio-alta" style="color:#8A6200;"><span class="prio-arrow">↑</span>Alta</span>
+          <div class="col-fecha overdue" style="width:100px;"><div class="fecha-main">05 Sep</div><div class="fecha-sub">Atrasada 2 días</div></div>
+        </div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t16','Registro de incidencias','Loyalty — Pago mixto con puntos','QA','Carlita','Pendiente','Baja','06 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Registro de incidencias</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · QA</div>
+          </div>
+          <span class="prio prio-baja" style="color:var(--text-secondary);"><span class="prio-arrow">↓</span>Baja</span>
+          <div class="col-fecha overdue" style="width:100px;"><div class="fecha-main">06 Sep</div><div class="fecha-sub">Atrasada 1 día</div></div>
+        </div>
+<div class="mt-bucket-title">🟠 Hoy</div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t13','Validar casos límite','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','Pendiente','Media','Hoy',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Validar casos límite</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · Desarrollo</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha today" style="width:100px;"><div class="fecha-main">Hoy</div></div>
+        </div>
+<div class="mt-bucket-title">🟡 Esta semana</div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t11','Integración frontend','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','En progreso','Media','14 Sep',30)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Integración frontend</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · Desarrollo</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha " style="width:100px;"><div class="fecha-main">14 Sep</div></div>
+        </div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t24','Definir segmentos','CRM — Segmentación','Negocio','Carlita','Pendiente','Media','Mañana',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Definir segmentos</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-plum)"></span>CRM — Segmentación · Negocio</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha " style="width:100px;"><div class="fecha-main">Mañana</div></div>
+        </div>
+<div class="mt-bucket-title">⚪ Más adelante</div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t12','Mensajes de error','Loyalty — Pago mixto con puntos','Desarrollo','Carlita','Bloqueada','Media','16 Sep',20)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Mensajes de error</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · Desarrollo</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha " style="width:100px;"><div class="fecha-main">16 Sep</div></div>
+        </div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t14','Crear casos de prueba','Loyalty — Pago mixto con puntos','QA','Carlita','Pendiente','Media','16 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Crear casos de prueba</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-cyan)"></span>Loyalty — Pago mixto con puntos · QA</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha " style="width:100px;"><div class="fecha-main">16 Sep</div></div>
+        </div>
+
+        <div class="mt-item" onclick="openTaskDrawer('t22','Pruebas de entrega','App Delivery','QA','Carlita','Pendiente','Media','22 Sep',0)">
+          <input type="checkbox" class="task-check" onclick="event.stopPropagation(); handleTaskSelect(this)">
+          <div class="mt-info">
+            <div class="mt-name">Pruebas de entrega</div>
+            <div class="mt-meta"><span class="proj-dot" style="background:var(--proj-teal)"></span>App Delivery · QA</div>
+          </div>
+          <span class="prio prio-media" style="color:var(--color-teal-700, var(--color-brand-teal));"><span class="prio-arrow">→</span>Media</span>
+          <div class="col-fecha " style="width:100px;"><div class="fecha-main">22 Sep</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Task drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeTaskDrawer()"></div>
+<div class="drawer" id="taskDrawer">
+  <div class="drawer-head">
+    <div class="drawer-title" id="dTitle">Tarea</div>
+    <button class="drawer-close" onclick="closeTaskDrawer()">✕</button>
+  </div>
+  <div class="drawer-grid">
+    <div class="drawer-field"><div class="drawer-label">Proyecto</div><div class="drawer-value" id="dProj">—</div></div>
+    <div class="drawer-field"><div class="drawer-label">Área</div><div class="drawer-value" id="dArea">—</div></div>
+    <div class="drawer-field"><div class="drawer-label">Estado</div><div class="drawer-value" id="dEstado">—</div></div>
+    <div class="drawer-field"><div class="drawer-label">Prioridad</div><div class="drawer-value" id="dPrio">—</div></div>
+    <div class="drawer-field"><div class="drawer-label">Responsable</div><div class="drawer-value" id="dResp">—</div></div>
+    <div class="drawer-field"><div class="drawer-label">Fecha límite</div><div class="drawer-value" id="dFecha">—</div></div>
+  </div>
+  <div class="drawer-field">
+    <div class="drawer-label">Progreso</div>
+    <div class="progress-row"><div class="progress-track"><div class="progress-fill" id="dProgressFill" style="width:0%; background:var(--color-brand-cyan);"></div></div><div class="pct" id="dProgressPct">0%</div></div>
+  </div>
+
+  <div class="drawer-sub">
+    <div class="drawer-label" style="margin-bottom:6px;">Descripción</div>
+    <div style="font-size:12.5px; color:var(--text-secondary); line-height:1.6;" id="dDesc">Sin descripción todavía.</div>
+  </div>
+
+  <div class="drawer-sub" id="dSubtasksSection">
+    <div class="drawer-sub-title">Subtareas <span class="drawer-sub-count" id="dSubtasksCount"></span></div>
+    <div id="dSubtasksList"></div>
+  </div>
+
+  <div class="drawer-sub" id="dDepsSection">
+    <div class="drawer-sub-title">Dependencias</div>
+    <div id="dDepsList"></div>
+    <button class="btn btn-secondary" style="margin-top:8px; width:100%; justify-content:center;">+ Agregar dependencia</button>
+  </div>
+
+  <div class="drawer-sub">
+    <div class="drawer-sub-title">Documentos relacionados</div>
+    <div id="dDocsList"></div>
+  </div>
+
+  <div class="drawer-sub">
+    <div class="drawer-sub-title">Actividad</div>
+    <div id="dActivityList"></div>
+  </div>
+
+  <div class="drawer-actions">
+    <button class="btn btn-secondary">Editar</button>
+    <button class="btn btn-primary">Marcar completada</button>
+    <button class="btn-icon">⋯</button>
+  </div>
+</div>
+
+<script>
+  // ---------- View switching ----------
+  function setTaskView(view){
+    document.getElementById('view-list').style.display = view === 'list' ? '' : 'none';
+    document.getElementById('view-kanban').style.display = view === 'kanban' ? 'flex' : 'none';
+    document.getElementById('view-mis').style.display = view === 'mis' ? 'block' : 'none';
+    ['list','kanban','mis'].forEach(v => document.getElementById('vbtn-'+v).classList.toggle('active', v===view));
+  }
+
+  // ---------- Quick filter chips ----------
+  function quickFilter(key, el){
+    document.querySelectorAll('.qf-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const rows = document.querySelectorAll('.task-row-flat');
+    let visible = 0;
+    rows.forEach(r => {
+      let show = true;
+      if (key === 'atrasada') {
+        show = r.querySelector('.col-fecha.overdue') !== null;
+      } else if (key !== 'all') {
+        show = r.getAttribute('data-estado') === key;
+      }
+      r.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('resultCount').textContent = visible + ' tareas';
+  }
+
+  // ---------- Group collapse ----------
+  function toggleTaskGroup(key){
+    const chev = document.getElementById('tchev-' + key);
+    const rows = document.querySelectorAll('.task-row-flat[data-groupkey="' + key + '"]');
+    let willShow = false;
+    rows.forEach(r => { if (r.style.display === 'none') willShow = true; });
+    rows.forEach(r => { r.style.display = willShow ? '' : 'none'; });
+    chev.textContent = willShow ? '▾' : '▸';
+  }
+
+  // ---------- Search ----------
+  function searchTasks(q){
+    q = q.toLowerCase().trim();
+    const rows = document.querySelectorAll('.task-row-flat');
+    let visible = 0;
+    rows.forEach(r => {
+      const hay = (r.dataset.name + ' ' + r.dataset.proj + ' ' + r.dataset.resp);
+      const show = q === '' || hay.includes(q);
+      r.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('resultCount').textContent = visible + ' tareas';
+  }
+
+  // ---------- Bulk selection ----------
+  function handleTaskSelect(cb){
+    const all = document.querySelectorAll('.task-check:checked');
+    const bar = document.getElementById('bulkBar');
+    const count = document.getElementById('bulkCount');
+    if (all.length > 0){
+      bar.classList.add('show');
+      count.textContent = all.length + (all.length === 1 ? ' tarea seleccionada' : ' tareas seleccionadas');
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  // ---------- Task drawer ----------
+  const DRAWER_EXTRA = {
+    't10': {
+      desc: 'Permitir combinar puntos de fidelización con otro medio de pago dentro del flujo de checkout.',
+      subtasks: [['Validar request', true], ['Procesar puntos', true], ['Procesar medio de pago adicional', false], ['Generar respuesta', false]],
+      deps: [['Depende de', 'Diseño UI aprobado'], ['Bloquea', 'Inicio de QA']],
+      docs: ['📄 Requerimiento técnico API', '🎨 Figma'],
+      activity: [['Hoy 15:42', 'Carlita cambió estado: Pendiente → En progreso'], ['Ayer 16:20', 'José actualizó la fecha límite']]
+    },
+    't9': {
+      desc: 'Verificar que la estructura de request/response del API cumple el contrato definido con backend.',
+      subtasks: [],
+      deps: [['Bloquea', 'Implementar pago mixto']],
+      docs: ['📄 Requerimiento técnico API'],
+      activity: [['Hoy 11:20', 'Carlita comentó en la tarea'], ['Hace 2 días', 'Carlita cambió la fecha límite']]
+    },
+    't12': {
+      desc: 'Definir y mostrar los mensajes de error cuando el saldo de puntos sea insuficiente.',
+      subtasks: [],
+      deps: [['Depende de', 'API del proveedor']],
+      docs: [],
+      activity: [['Ayer 09:14', 'Sistema marcó la tarea como bloqueada']]
+    }
+  };
+
+  function openTaskDrawer(id, name, proj, area, resp, estado, prio, fecha, progress){
+    document.getElementById('dTitle').textContent = name;
+    document.getElementById('dProj').textContent = proj;
+    document.getElementById('dArea').textContent = area;
+    document.getElementById('dEstado').textContent = estado;
+    document.getElementById('dPrio').textContent = prio;
+    document.getElementById('dResp').textContent = resp;
+    document.getElementById('dFecha').textContent = fecha;
+    document.getElementById('dProgressFill').style.width = progress + '%';
+    document.getElementById('dProgressPct').textContent = progress + '%';
+
+    const extra = DRAWER_EXTRA[id];
+    document.getElementById('dDesc').textContent = extra ? extra.desc : 'Sin descripción todavía.';
+
+    const subSection = document.getElementById('dSubtasksSection');
+    const subList = document.getElementById('dSubtasksList');
+    const subCount = document.getElementById('dSubtasksCount');
+    if (extra && extra.subtasks.length > 0){
+      subSection.style.display = '';
+      const done = extra.subtasks.filter(s => s[1]).length;
+      subCount.textContent = done + ' / ' + extra.subtasks.length + ' completadas';
+      subList.innerHTML = extra.subtasks.map(s =>
+        '<div class="subtask-line' + (s[1] ? ' done' : '') + '"><input type="checkbox" ' + (s[1] ? 'checked' : '') + ' disabled><span class="subtask-name">' + s[0] + '</span></div>'
+      ).join('');
+    } else {
+      subSection.style.display = 'none';
+    }
+
+    const depsList = document.getElementById('dDepsList');
+    if (extra && extra.deps.length > 0){
+      depsList.innerHTML = extra.deps.map(d => '<div class="dep-line"><span class="dep-label">' + d[0] + ':</span><span>' + d[1] + '</span></div>').join('');
+    } else {
+      depsList.innerHTML = '<div style="font-size:12.5px; color:var(--text-secondary);">Sin dependencias registradas.</div>';
+    }
+
+    const docsList = document.getElementById('dDocsList');
+    if (extra && extra.docs.length > 0){
+      docsList.innerHTML = extra.docs.map(d => '<div class="doc-line">' + d + '</div>').join('');
+    } else {
+      docsList.innerHTML = '<div style="font-size:12.5px; color:var(--text-secondary);">Sin documentos relacionados.</div>';
+    }
+
+    const actList = document.getElementById('dActivityList');
+    if (extra && extra.activity.length > 0){
+      actList.innerHTML = extra.activity.map(a => '<div class="activity-mini"><b>' + a[0] + '</b> · ' + a[1] + '</div>').join('');
+    } else {
+      actList.innerHTML = '<div class="activity-mini">Sin actividad reciente.</div>';
+    }
+
+    document.getElementById('taskDrawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+  }
+  function closeTaskDrawer(){
+    document.getElementById('taskDrawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+  }
+</script>
+
+</body>
+</html>
